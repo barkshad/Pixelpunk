@@ -1,7 +1,8 @@
 
 import React from 'react';
+import { SiteSettings } from '../types';
 
-const About: React.FC = () => {
+const About: React.FC<{ settings: SiteSettings }> = ({ settings }) => {
   return (
     <section className="min-h-screen pt-32 md:pt-48 pb-24 px-6 md:px-12 max-w-[1600px] mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-24 lg:gap-32 items-start">
@@ -26,7 +27,7 @@ const About: React.FC = () => {
             FUCK FAST FASHION GNG
           </div>
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-12 lg:mb-16 tracking-tighter">
-            Motion is forever. Trends are mid. This is my <span className="italic">language.</span> I stay <span className="italic border-b-4 border-brand-bone/40">selective</span> twin.
+            {settings.aboutManifesto}
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 mb-20">

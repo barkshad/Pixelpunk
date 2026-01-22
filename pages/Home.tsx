@@ -1,7 +1,13 @@
 
 import React from 'react';
+import { SiteSettings } from '../types';
 
-const Home: React.FC<{ setView: (v: any) => void }> = ({ setView }) => {
+const Home: React.FC<{ setView: (v: any) => void, settings: SiteSettings }> = ({ setView, settings }) => {
+  // Parsing headline into split parts for styling
+  const words = settings.homeHeadline.split(' ');
+  const mainText = words.slice(0, -1).join(' ');
+  const lastWord = words[words.length - 1];
+
   return (
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-brand-obsidian px-6">
       {/* Background Visual */}
@@ -21,7 +27,7 @@ const Home: React.FC<{ setView: (v: any) => void }> = ({ setView }) => {
         </div>
         
         <h1 className="hero-text font-serif mb-10 tracking-tighter select-none opacity-100 drop-shadow-2xl">
-          Fuck Fast <span className="italic">Fashion.</span>
+          {mainText} <span className="italic">{lastWord}</span>
         </h1>
         
         <div className="flex flex-col items-center gap-12 md:gap-16 w-full">

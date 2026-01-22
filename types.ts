@@ -10,4 +10,10 @@ export interface Fit {
   date: string;
 }
 
-export type ViewState = 'home' | 'fits' | 'about' | 'contact';
+export interface SiteSettings {
+  homeHeadline: string;
+  aboutManifesto: string;
+  footerTagline: string;
+}
+
+export type ViewState = 'home' | 'fits' | 'about' | 'contact' | 'admin';

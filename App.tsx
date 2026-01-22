@@ -5,10 +5,36 @@ import Home from './pages/Home';
 import Fits from './pages/Fits';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import { ViewState } from './types';
+import AdminPanel from './components/AdminPanel';
+import { ViewState, Fit, SiteSettings } from './types';
+import { FITS_DATA } from './constants';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('home');
+  
+  // Dynamic data managed by CMS
+  const [fits, setFits] = useState<Fit[]>(() => {
+    const saved = localStorage.getItem('_pixelpunk_fits');
+    return saved ? JSON.parse(saved) : FITS_DATA;
+  });
+
+  const [settings, setSettings] = useState<SiteSettings>(() => {
+    const saved = localStorage.getItem('_pixelpunk_settings');
+    return saved ? JSON.parse(saved) : {
+      homeHeadline: "Fuck Fast Fashion.",
+      aboutManifesto: "Motion is forever. Trends are mid. This is my language. I stay selective twin.",
+      footerTagline: "FUCK FAST FASHION TWIN."
+    };
+  });
+
+  // Persist changes
+  useEffect(() => {
+    localStorage.setItem('_pixelpunk_fits', JSON.stringify(fits));
+  }, [fits]);
+
+  useEffect(() => {
+    localStorage.setItem('_pixelpunk_settings', JSON.stringify(settings));
+  }, [settings]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -16,11 +42,12 @@ const App: React.FC = () => {
 
   const renderView = () => {
     switch (view) {
-      case 'home': return <Home setView={setView} />;
-      case 'fits': return <Fits />;
-      case 'about': return <About />;
+      case 'home': return <Home setView={setView} settings={settings} />;
+      case 'fits': return <Fits fits={fits} />;
+      case 'about': return <About settings={settings} />;
       case 'contact': return <Contact />;
-      default: return <Home setView={setView} />;
+      case 'admin': return <AdminPanel fits={fits} setFits={setFits} settings={settings} setSettings={setSettings} />;
+      default: return <Home setView={setView} settings={settings} />;
     }
   };
 
@@ -38,7 +65,7 @@ const App: React.FC = () => {
             <h4 className="text-3xl font-serif tracking-tighter italic">_pixelpunk</h4>
             <div className="space-y-4">
               <p className="text-[14px] tracking-[0.5em] text-brand-bone uppercase font-black italic border-b border-brand-bone/20 pb-2 w-fit">
-                FUCK FAST FASHION TWIN.
+                {settings.footerTagline}
               </p>
               <p className="text-[10px] tracking-[0.5em] text-brand-bone/30 uppercase font-black">
                 ©2024 REAL MOTION ONLY • STAMPED BY BARAKA • ON GOD
@@ -51,6 +78,7 @@ const App: React.FC = () => {
               <span className="text-[10px] tracking-[0.4em] text-brand-bone/40 uppercase font-black">NAV</span>
               <button onClick={() => setView('fits')} className="text-[11px] tracking-[0.3em] text-brand-bone/70 hover:text-brand-bone text-left uppercase font-bold">THE ROTATION</button>
               <button onClick={() => setView('about')} className="text-[11px] tracking-[0.3em] text-brand-bone/70 hover:text-brand-bone text-left uppercase font-bold">THE CODE</button>
+              <button onClick={() => setView('admin')} className="text-[11px] tracking-[0.3em] text-brand-bone/40 hover:text-brand-bone text-left uppercase font-black border-t border-white/5 pt-4">TAP IN (ADMIN)</button>
             </div>
             <div className="flex flex-col gap-6">
               <span className="text-[10px] tracking-[0.4em] text-brand-bone/40 uppercase font-black">SOCIALS</span>

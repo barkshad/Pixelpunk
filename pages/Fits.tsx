@@ -2,10 +2,13 @@
 import React, { useState } from 'react';
 import FitCard from '../components/FitCard';
 import FitModal from '../components/FitModal';
-import { FITS_DATA } from '../constants';
 import { Fit } from '../types';
 
-const Fits: React.FC = () => {
+interface FitsProps {
+  fits: Fit[];
+}
+
+const Fits: React.FC<FitsProps> = ({ fits }) => {
   const [selectedFit, setSelectedFit] = useState<Fit | null>(null);
 
   return (
@@ -41,13 +44,17 @@ const Fits: React.FC = () => {
       </header>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-10 md:gap-x-16 lg:gap-x-20 gap-y-16">
-        {FITS_DATA.map((fit) => (
+        {fits.length > 0 ? fits.map((fit) => (
           <FitCard 
             key={fit.id} 
             fit={fit} 
             onClick={setSelectedFit} 
           />
-        ))}
+        )) : (
+          <div className="col-span-full py-32 text-center">
+            <p className="text-2xl font-serif italic text-brand-bone/30 tracking-widest uppercase">The Vault is Empty GNG. Add some Grails.</p>
+          </div>
+        )}
       </div>
 
       <FitModal 
@@ -56,7 +63,7 @@ const Fits: React.FC = () => {
       />
       
       <div className="mt-24 md:mt-40 pt-16 border-t border-white/20 flex flex-col sm:flex-row justify-between items-center gap-8">
-        <span className="text-[12px] tracking-[0.5em] text-brand-bone/70 uppercase font-black">Peeping 06 of 06 Grails</span>
+        <span className="text-[12px] tracking-[0.5em] text-brand-bone/70 uppercase font-black">Peeping {fits.length} Grails</span>
         <button className="text-[13px] tracking-[0.6em] text-brand-bone font-black uppercase border-b-4 border-brand-bone/40 pb-3 hover:border-brand-bone transition-all italic">
           VIEW PAST MOTION
         </button>
