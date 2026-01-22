@@ -22,37 +22,51 @@ const About: React.FC = () => {
 
         {/* Text Content */}
         <div className="lg:col-span-7 pt-12 lg:pt-24 flex flex-col">
-          <h2 className="text-6xl md:text-8xl font-serif leading-[1.1] mb-16 tracking-tight">
-            Curating the <span className="italic">unspoken</span> language of <span className="italic border-b border-brand-bone/30">proportion</span>.
+          <h2 className="text-5xl md:text-7xl font-serif leading-[1.1] mb-16 tracking-tight">
+            Style is not disposable. Clothing is <span className="italic">language.</span> I choose my words <span className="italic border-b border-brand-bone/30">carefully.</span>
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 mb-24">
             <div className="space-y-10">
-              <p className="text-brand-bone/70 text-lg leading-relaxed font-light">
-                Shadrack Baraka, recognized digitally as <span className="text-brand-bone font-medium">_pixelpunk</span>, operates at the intersection of architectural form and modern streetwear. His methodology is rooted in the "reductive process"—eliminating the superfluous to amplify the essential silhouette.
-              </p>
-              <p className="text-brand-bone/70 text-lg leading-relaxed font-light">
-                Based between Nairobi and London, Baraka's styling work explores the narrative potential of technical fabrics and archival garments, prioritizing texture over trend.
-              </p>
-            </div>
-            
-            <div className="space-y-12">
-              <div className="border-t border-white/10 pt-8">
-                <h4 className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 mb-6 font-bold">Expertise</h4>
-                <ul className="space-y-4 text-sm tracking-wide text-brand-bone/60">
-                  <li className="flex justify-between border-b border-white/[0.03] pb-2"><span>Editorial Styling</span> <span>01</span></li>
-                  <li className="flex justify-between border-b border-white/[0.03] pb-2"><span>Creative Direction</span> <span>02</span></li>
-                  <li className="flex justify-between border-b border-white/[0.03] pb-2"><span>Archive Consulting</span> <span>03</span></li>
-                  <li className="flex justify-between border-b border-white/[0.03] pb-2"><span>Silhouette Theory</span> <span>04</span></li>
-                </ul>
-              </div>
-              
-              <div className="border-t border-white/10 pt-8">
-                <h4 className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 mb-6 font-bold">Philosophy</h4>
-                <p className="italic font-serif text-2xl text-brand-bone/90 leading-snug">
-                  "Fashion is a three-dimensional dialogue between the garment and the void."
+              <div className="border-l-2 border-brand-bone/10 pl-8 space-y-6">
+                <p className="text-brand-bone text-lg leading-relaxed font-medium">
+                  Fast fashion taught people to consume. Style should teach people to see.
+                </p>
+                <p className="text-brand-bone/60 text-base leading-relaxed font-light">
+                  This space is a rejection of disposable design, rushed trends, and algorithmic taste. Every fit here is styled slowly, worn deliberately, and archived with purpose.
                 </p>
               </div>
+            </div>
+            
+            <div className="space-y-10">
+              <p className="text-brand-bone/60 text-base leading-relaxed font-light">
+                Shadrack Baraka is a fashion influencer and stylist working against disposable fashion culture. His work focuses on curated fits, repeated wear, and expressive styling at the intersection of art and apparel.
+              </p>
+              <p className="text-brand-bone/60 text-base leading-relaxed font-light">
+                This is fashion without urgency. Style without waste. Identity without trends.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 pt-16 border-t border-white/10">
+            <div>
+              <h4 className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/30 mb-8 font-bold">What This Is Not</h4>
+              <ul className="space-y-6 text-sm tracking-[0.1em] text-brand-bone/60 uppercase">
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-red-900/40 rounded-full" /> Not fast fashion</li>
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-red-900/40 rounded-full" /> Not trend-chasing</li>
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-red-900/40 rounded-full" /> Not overconsumption</li>
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-red-900/40 rounded-full" /> Not seasonal identity</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/30 mb-8 font-bold">What It Is</h4>
+              <ul className="space-y-6 text-sm tracking-[0.1em] text-brand-bone font-medium uppercase">
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-brand-bone rounded-full" /> Intentional styling</li>
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-brand-bone rounded-full" /> Rewearing with purpose</li>
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-brand-bone rounded-full" /> Fashion as expression</li>
+                <li className="flex items-center gap-4"><span className="w-1.5 h-1.5 bg-brand-bone rounded-full" /> Fits with memory</li>
+              </ul>
             </div>
           </div>
         </div>

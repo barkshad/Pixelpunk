@@ -16,14 +16,20 @@ const Home: React.FC<{ setView: (v: any) => void }> = ({ setView }) => {
 
       {/* Core Typography */}
       <div className="relative z-10 flex flex-col items-center px-8 max-w-5xl fade-in">
-        <h1 className="text-8xl md:text-[14rem] font-serif leading-[0.75] mb-12 tracking-tighter select-none opacity-90">
-          _pixel<span className="italic">punk</span>
+        <h1 className="text-6xl md:text-[10rem] font-serif leading-[0.8] mb-12 tracking-tighter select-none opacity-90 text-center">
+          Fuck Fast <span className="italic">Fashion.</span>
         </h1>
         
         <div className="flex flex-col items-center gap-16 w-full">
-          <p className="text-brand-bone/50 tracking-[0.6em] uppercase text-[9px] md:text-xs text-center leading-loose max-w-lg">
-            A comprehensive archive of contemporary silhouettes, styling theory, and digital creative direction by Shadrack Baraka.
-          </p>
+          <div className="text-center space-y-4">
+            <p className="text-brand-bone tracking-[0.4em] uppercase text-xs md:text-sm font-bold">
+              Style is not disposable.
+            </p>
+            <p className="text-brand-bone/40 tracking-[0.3em] uppercase text-[10px] md:text-xs max-w-md mx-auto leading-relaxed">
+              Fits curated with intention, not trends. 
+              Archive of Shadrack Baraka — stylist & visual visionary.
+            </p>
+          </div>
           
           <button 
             onClick={() => setView('fits')}

@@ -27,11 +27,14 @@ const Contact: React.FC = () => {
             <div>
               <h4 className="text-[10px] tracking-[0.4em] uppercase text-brand-bone/30 mb-8 font-bold">Direct Correspondence</h4>
               <a 
-                href="mailto:inquire@pixelpunk.art" 
+                href="mailto:studio@pixelpunk.art" 
                 className="text-3xl md:text-5xl font-serif hover:italic hover:pl-4 transition-all duration-500 border-b border-white/10 pb-2 block w-fit"
               >
                 studio@pixelpunk.art
               </a>
+              <p className="text-[9px] tracking-[0.3em] text-brand-bone/40 uppercase mt-4 font-bold">
+                Brands aligned with intentional fashion only. No fast fashion.
+              </p>
             </div>
 
             <div>
@@ -58,7 +61,7 @@ const Contact: React.FC = () => {
             <header className="mb-12 border-b border-white/5 pb-8">
               <h3 className="text-2xl font-serif italic mb-4 tracking-tight">Style Consultation System</h3>
               <p className="text-sm text-brand-bone/40 leading-relaxed font-light">
-                Utilize the _pixelpunk archival database to receive immediate stylistic analysis for specific garments or conceptual silhouettes.
+                Utilize the _pixelpunk archival database to receive immediate stylistic analysis for specific garments or conceptual silhouettes. Grounded in intentional styling theory.
               </p>
             </header>
             

@@ -36,9 +36,14 @@ const App: React.FC = () => {
         <div className="max-w-[1800px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
           <div className="flex flex-col gap-4">
             <h4 className="text-xl font-serif tracking-tighter">_pixelpunk</h4>
-            <p className="text-[9px] tracking-[0.4em] text-brand-bone/20 uppercase font-bold">
-              ©2024 ARCHIVE RECORD • VOL 01-SHB
-            </p>
+            <div className="space-y-2">
+              <p className="text-[12px] tracking-[0.4em] text-brand-bone uppercase font-bold italic">
+                Fuck fast fashion. Long live style.
+              </p>
+              <p className="text-[9px] tracking-[0.4em] text-brand-bone/20 uppercase font-bold">
+                ©2024 ARCHIVE RECORD • VOL 01-SHB
+              </p>
+            </div>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-16 gap-y-4">

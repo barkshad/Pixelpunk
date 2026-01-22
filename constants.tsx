@@ -5,7 +5,7 @@ export const FITS_DATA: Fit[] = [
   {
     id: '1',
     title: 'Monochrome Echo',
-    description: 'A study in tonal depth and structural layering. This silhouette explores the intersection of utilitarian technical wear and traditional tailoring through a monochrome lens.',
+    description: 'This fit exists outside trend cycles. A study in tonal depth and structural layering using heavy-weight archival fabrics designed to endure.',
     imageUrl: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&q=80&w=800',
     category: 'minimal',
     brands: ['Rick Owens', 'Ann Demeulemeester', 'Custom Archive'],
@@ -15,7 +15,7 @@ export const FITS_DATA: Fit[] = [
   {
     id: '2',
     title: 'Concrete Pulse',
-    description: 'Focusing on the architectural weight of heavy wool against structured denim. Proportions are exaggerated to challenge the standard male form.',
+    description: 'Worn more than once. Styled more than twice. Exploring architectural weight through structured denim that breaks in over years, not weeks.',
     imageUrl: 'https://images.unsplash.com/photo-1550639525-c97d455acf70?auto=format&fit=crop&q=80&w=800',
     category: 'avant-garde',
     brands: ['Issey Miyake', 'Yohji Yamamoto'],
@@ -25,7 +25,7 @@ export const FITS_DATA: Fit[] = [
   {
     id: '3',
     title: 'Void Runner',
-    description: 'Performance-driven materials integrated into an urban aesthetic. This look prioritizes mobility and protection without sacrificing visual hierarchy.',
+    description: 'Designed to last longer than attention spans. High-performance technical wear curated with intention, prioritizing utility over hype.',
     imageUrl: 'https://images.unsplash.com/photo-1539106609512-d875b6819348?auto=format&fit=crop&q=80&w=800',
     category: 'streetwear',
     brands: ['Acronym', 'Stone Island Shadow Project'],
@@ -35,7 +35,7 @@ export const FITS_DATA: Fit[] = [
   {
     id: '4',
     title: 'Structured Silence',
-    description: 'A sharp interpretation of formal wear. The silhouette is defined by aggressive shoulder lines and minimal hardware intervention.',
+    description: 'Clothes age, style evolves. Sharp formal silhouettes defined by aggressive shoulder lines and enduring craftsmanship.',
     imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800',
     category: 'tailoring',
     brands: ['Saint Laurent', 'Givenchy'],
@@ -45,7 +45,7 @@ export const FITS_DATA: Fit[] = [
   {
     id: '5',
     title: 'Archive Soul',
-    description: 'Curated pieces from the late 90s reimagined for contemporary context. A focus on high-quality fabrics and enduring silhouettes.',
+    description: 'If it expires, it wasn’t style. Recontextualized 90s minimalism that remains relevant regardless of the current season.',
     imageUrl: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=800',
     category: 'minimal',
     brands: ['Helmut Lang Archive', 'Margiela'],
@@ -55,7 +55,7 @@ export const FITS_DATA: Fit[] = [
   {
     id: '6',
     title: 'Fragmented Reality',
-    description: 'Deconstructed aesthetics where the process of making is visible. Raw edges and exposed seams serve as the primary decorative elements.',
+    description: 'Fit over hype. Deconstructed aesthetics where raw edges and exposed seams serve as the primary decorative elements of a permanent wardrobe.',
     imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800',
     category: 'avant-garde',
     brands: ['KAPITAL', 'Visvim'],

@@ -12,11 +12,16 @@ const Fits: React.FC = () => {
     <section className="min-h-screen pt-48 pb-32 px-8 md:px-16 max-w-[1800px] mx-auto">
       <header className="mb-32 flex flex-col md:flex-row md:items-end justify-between gap-16">
         <div className="max-w-3xl">
-          <span className="text-[10px] tracking-[0.4em] text-brand-bone/30 uppercase block mb-6 font-bold">Lookbook Archive</span>
+          <span className="text-[10px] tracking-[0.4em] text-brand-bone/30 uppercase block mb-6 font-bold">The Fits</span>
           <h2 className="text-7xl md:text-9xl font-serif italic leading-none mb-10 tracking-tight">The Archive</h2>
-          <p className="text-brand-bone/50 text-lg leading-relaxed font-light max-w-xl">
-            A chronological study of personal styling, exploring the tension between utilitarian form and high-fashion editorial narrative.
-          </p>
+          <div className="space-y-4 max-w-xl">
+            <p className="text-brand-bone/70 text-lg leading-relaxed font-light">
+              No hauls. No trend cycles. No throwaway silhouettes.
+            </p>
+            <p className="text-brand-bone/40 text-sm leading-relaxed tracking-wide font-light">
+              These are styled looks built from texture, proportion, and feeling — not what dropped last week. Fashion, slowed down.
+            </p>
+          </div>
         </div>
         
         <div className="flex flex-wrap gap-4 border-b border-white/10 pb-4">
