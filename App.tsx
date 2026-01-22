@@ -25,7 +25,9 @@ const App: React.FC = () => {
     contactHeadline: "Tap In Twin",
     contactDescription: "Need to fix your rotation gng? Tap in with the AI stylist to get the vision. No brick fits allowed, on god.",
     footerTagline: "FUCK FAST FASHION TWIN.",
-    heroVideoUrl: ""
+    heroVideoUrl: "",
+    instagramUrl: "https://www.instagram.com/_pixelpunk?igsh=ZnhoM3ZzaTNuN3ps",
+    instagramBio: "Fashion | Creative | Lifestyle 🏁 The intersection of art & apparel 🪡"
   });
   const [loading, setLoading] = useState(true);
 
@@ -113,7 +115,7 @@ const App: React.FC = () => {
             </div>
             <div className="flex flex-col gap-6">
               <span className="text-[10px] tracking-[0.4em] text-brand-bone/40 uppercase font-black">SOCIALS</span>
-              <a href="#" className="text-[11px] tracking-[0.3em] text-brand-bone/70 hover:text-brand-bone uppercase font-bold">INSTA</a>
+              <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] tracking-[0.3em] text-brand-bone/70 hover:text-brand-bone uppercase font-bold">INSTA</a>
               <a href="#" className="text-[11px] tracking-[0.3em] text-brand-bone/70 hover:text-brand-bone uppercase font-bold">TWITTER (X)</a>
             </div>
             <div className="flex flex-col gap-6 col-span-2 md:col-span-1">

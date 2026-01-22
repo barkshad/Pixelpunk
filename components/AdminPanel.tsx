@@ -312,38 +312,48 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Main Headline</label>
-                      <input type="text" value={localSettings.homeHeadline} onChange={e => handleSettingsUpdate('homeHeadline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none" />
+                      <input type="text" value={localSettings.homeHeadline} onChange={e => handleSettingsUpdate('homeHeadline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none font-bold" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Sub Headline</label>
-                      <input type="text" value={localSettings.homeSubheadline} onChange={e => handleSettingsUpdate('homeSubheadline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none" />
+                      <input type="text" value={localSettings.homeSubheadline} onChange={e => handleSettingsUpdate('homeSubheadline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none font-bold" />
                     </div>
                  </div>
                  <div className="space-y-2">
                     <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Hero Description</label>
-                    <textarea value={localSettings.homeDescription} onChange={e => handleSettingsUpdate('homeDescription', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[100px] resize-none" />
+                    <textarea value={localSettings.homeDescription} onChange={e => handleSettingsUpdate('homeDescription', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[100px] resize-none font-bold" />
                  </div>
                </div>
 
                {/* About Section */}
                <div className="space-y-6 pt-10 border-t border-white/10">
-                 <h4 className="text-[11px] tracking-[0.4em] font-black text-brand-bone/30 uppercase italic">About Page</h4>
+                 <h4 className="text-[11px] tracking-[0.4em] font-black text-brand-bone/30 uppercase italic">About Page & Socials</h4>
                  <div className="space-y-2">
                     <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Main Manifesto (Large Text)</label>
-                    <textarea value={localSettings.aboutManifesto} onChange={e => handleSettingsUpdate('aboutManifesto', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[120px] resize-none" />
+                    <textarea value={localSettings.aboutManifesto} onChange={e => handleSettingsUpdate('aboutManifesto', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[120px] resize-none font-bold" />
+                 </div>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                   <div className="space-y-2">
+                      <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Instagram URL</label>
+                      <input type="text" value={localSettings.instagramUrl} onChange={e => handleSettingsUpdate('instagramUrl', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none font-bold" />
+                   </div>
+                   <div className="space-y-2">
+                      <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Instagram Bio Text</label>
+                      <input type="text" value={localSettings.instagramBio} onChange={e => handleSettingsUpdate('instagramBio', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none font-bold" />
+                   </div>
                  </div>
                  <div className="space-y-2">
                     <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Style Quote</label>
-                    <input type="text" value={localSettings.aboutQuote} onChange={e => handleSettingsUpdate('aboutQuote', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none" />
+                    <input type="text" value={localSettings.aboutQuote} onChange={e => handleSettingsUpdate('aboutQuote', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none font-bold" />
                  </div>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Body Text Column 1</label>
-                      <textarea value={localSettings.aboutBody1} onChange={e => handleSettingsUpdate('aboutBody1', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[150px] resize-none" />
+                      <textarea value={localSettings.aboutBody1} onChange={e => handleSettingsUpdate('aboutBody1', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[150px] resize-none font-bold" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Body Text Column 2</label>
-                      <textarea value={localSettings.aboutBody2} onChange={e => handleSettingsUpdate('aboutBody2', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[150px] resize-none" />
+                      <textarea value={localSettings.aboutBody2} onChange={e => handleSettingsUpdate('aboutBody2', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[150px] resize-none font-bold" />
                     </div>
                  </div>
                </div>
@@ -353,11 +363,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                  <h4 className="text-[11px] tracking-[0.4em] font-black text-brand-bone/30 uppercase italic">Contact Page</h4>
                  <div className="space-y-2">
                     <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Headline</label>
-                    <input type="text" value={localSettings.contactHeadline} onChange={e => handleSettingsUpdate('contactHeadline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none" />
+                    <input type="text" value={localSettings.contactHeadline} onChange={e => handleSettingsUpdate('contactHeadline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none font-bold" />
                  </div>
                  <div className="space-y-2">
                     <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">AI System Description</label>
-                    <textarea value={localSettings.contactDescription} onChange={e => handleSettingsUpdate('contactDescription', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[100px] resize-none" />
+                    <textarea value={localSettings.contactDescription} onChange={e => handleSettingsUpdate('contactDescription', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none h-[100px] resize-none font-bold" />
                  </div>
                </div>
 
@@ -366,14 +376,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                  <h4 className="text-[11px] tracking-[0.4em] font-black text-brand-bone/30 uppercase italic">Footer</h4>
                  <div className="space-y-2">
                     <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 font-black">Footer Tagline</label>
-                    <input type="text" value={localSettings.footerTagline} onChange={e => handleSettingsUpdate('footerTagline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none" />
+                    <input type="text" value={localSettings.footerTagline} onChange={e => handleSettingsUpdate('footerTagline', e.target.value)} className="w-full bg-brand-obsidian p-4 border border-white/10 focus:border-brand-bone/50 outline-none font-bold" />
                  </div>
                </div>
 
                <button 
                 onClick={saveGlobalSettings} 
                 disabled={savingSettings}
-                className="w-full py-8 bg-brand-bone text-brand-obsidian font-black tracking-[0.5em] uppercase hover:invert transition-all mt-10"
+                className="w-full py-8 bg-brand-bone text-brand-obsidian font-black tracking-[0.5em] uppercase hover:invert transition-all mt-10 rounded-sm shadow-xl"
                >
                  {savingSettings ? 'SYNCING TO VAULT...' : 'ENFORCE VISION (SAVE ALL)'}
                </button>
@@ -410,7 +420,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
               <h3 className="text-2xl font-serif italic mb-8 border-b border-white/10 pb-4 uppercase tracking-tighter">Vault Maintenance</h3>
               <div className="max-h-[500px] overflow-y-auto no-scrollbar space-y-4">
                 {fits.map(fit => (
-                  <div key={fit.id} className="flex items-center gap-4 bg-brand-obsidian/40 p-3 border border-white/5 group">
+                  <div key={fit.id} className="flex items-center gap-4 bg-brand-obsidian/40 p-3 border border-white/5 group rounded-sm">
                     <img src={fit.imageUrl} className="w-12 h-12 object-cover grayscale" />
                     <div className="flex-1 min-w-0">
                       <p className="text-[10px] font-black uppercase text-brand-bone truncate italic">{fit.title}</p>
@@ -421,7 +431,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                         deleteDoc(doc(db, 'fits', fit.id));
                         setFits(prev => prev.filter(f => f.id !== fit.id));
                       }
-                    }} className="opacity-0 group-hover:opacity-100 text-red-500 transition-all">
+                    }} className="opacity-0 group-hover:opacity-100 text-red-500 transition-all p-2 hover:bg-red-500/10 rounded-full">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
                     </button>
                   </div>

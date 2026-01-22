@@ -7,16 +7,38 @@ const About: React.FC<{ settings: SiteSettings }> = ({ settings }) => {
     <section className="min-h-screen pt-32 md:pt-48 pb-24 px-6 md:px-12 max-w-[1600px] mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-24 lg:gap-32 items-start">
         <div className="lg:col-span-5 fade-in">
-          <div className="aspect-[4/6] bg-brand-charcoal overflow-hidden border border-white/10 rounded-sm shadow-2xl">
+          <div className="aspect-[4/6] bg-brand-charcoal overflow-hidden border border-white/10 rounded-sm shadow-2xl relative group">
             <img 
               src="https://images.unsplash.com/photo-1621333104435-41a38484e97b?auto=format&fit=crop&q=80&w=1200" 
               alt="Shadrack Baraka Vision"
-              className="w-full h-full object-cover grayscale brightness-75 hover:brightness-100 transition-all duration-700"
+              className="w-full h-full object-cover grayscale brightness-75 group-hover:brightness-100 group-hover:scale-105 transition-all duration-700"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-obsidian/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
+               <p className="text-[10px] tracking-[0.4em] font-black uppercase text-brand-bone mb-2 italic">Visionary Mindset</p>
+               <h4 className="font-serif italic text-2xl">Shadrack Baraka</h4>
+            </div>
           </div>
+          
+          {/* Instagram Info */}
+          <div className="mt-12 p-8 bg-white/5 border border-white/10 rounded-sm">
+             <h4 className="text-[11px] tracking-[0.5em] text-brand-bone/50 uppercase font-black mb-6">Social Context</h4>
+             <p className="text-lg md:text-xl font-serif italic text-brand-bone/90 mb-8 leading-snug">
+                "{settings.instagramBio}"
+             </p>
+             <a 
+              href={settings.instagramUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-4 text-[11px] tracking-[0.4em] font-black text-brand-bone uppercase italic border-b-2 border-brand-bone/20 hover:border-brand-bone transition-all pb-2"
+             >
+                Peep the Daily Motion
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+             </a>
+          </div>
+
           <div className="mt-8 flex justify-between items-baseline border-b border-white/20 pb-6">
             <p className="text-[12px] tracking-[0.5em] text-brand-bone/70 uppercase font-black">HE'S HIM</p>
-            <p className="text-[12px] tracking-[0.5em] text-brand-bone uppercase font-black">BARAKA STAMPED</p>
+            <p className="text-[12px] tracking-[0.5em] text-brand-bone uppercase font-black italic">BARAKA STAMPED</p>
           </div>
         </div>
 

@@ -26,6 +26,8 @@ export interface SiteSettings {
   contactDescription: string;
   footerTagline: string;
   heroVideoUrl?: string;
+  instagramUrl: string;
+  instagramBio: string;
 }
 
 export type ViewState = 'home' | 'fits' | 'about' | 'contact' | 'admin';
