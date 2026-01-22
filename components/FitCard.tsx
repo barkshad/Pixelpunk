@@ -10,32 +10,33 @@ interface FitCardProps {
 const FitCard: React.FC<FitCardProps> = ({ fit, onClick }) => {
   return (
     <div 
-      className="group cursor-pointer mb-16 fade-in"
+      className="group cursor-pointer mb-12 md:mb-20 fade-in"
       onClick={() => onClick(fit)}
     >
-      <div className="relative overflow-hidden bg-brand-charcoal aspect-[4/5] mb-6">
+      <div className="relative overflow-hidden bg-brand-charcoal aspect-[4/5] mb-6 rounded-sm shadow-2xl">
         <img 
           src={fit.imageUrl} 
           alt={fit.title}
-          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03] opacity-80 group-hover:opacity-100"
+          className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.05] opacity-90 group-hover:opacity-100"
+          loading="lazy"
         />
-        <div className="absolute top-6 left-6 flex gap-2">
-          <span className="text-[8px] tracking-[0.2em] font-bold uppercase text-brand-bone/90 bg-brand-obsidian/60 px-2 py-1.5 border border-white/5 backdrop-blur-sm">
+        <div className="absolute top-4 left-4 md:top-8 md:left-8 flex gap-2">
+          <span className="text-[10px] tracking-[0.2em] font-bold uppercase text-brand-bone bg-brand-obsidian/90 px-3 py-2 border border-white/20 backdrop-blur-md">
             {fit.category}
           </span>
         </div>
       </div>
       
-      <div className="flex flex-col border-l border-white/10 pl-6 py-1">
-        <div className="flex justify-between items-baseline mb-2">
-          <h3 className="font-serif text-2xl group-hover:italic transition-all duration-300">
+      <div className="flex flex-col border-l-2 border-white/20 pl-6 py-1">
+        <div className="flex justify-between items-baseline mb-3 flex-wrap gap-2">
+          <h3 className="font-serif text-2xl md:text-3xl group-hover:italic transition-all duration-300 tracking-tight">
             {fit.title}
           </h3>
-          <span className="text-[9px] tracking-[0.3em] text-brand-bone/30 uppercase font-medium">
+          <span className="text-[11px] tracking-[0.3em] text-brand-bone/70 uppercase font-bold">
             {fit.date}
           </span>
         </div>
-        <p className="text-xs text-brand-bone/40 leading-relaxed max-w-sm line-clamp-1 group-hover:text-brand-bone/60 transition-colors">
+        <p className="text-sm md:text-base text-brand-bone/80 leading-relaxed max-w-sm line-clamp-3 group-hover:text-brand-bone transition-colors">
           {fit.description}
         </p>
       </div>
