@@ -24,9 +24,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
   const [stagedFits, setStagedFits] = useState<StagedFit[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Default config for new fits
   const [batchConfig, setBatchConfig] = useState({
     category: 'streetwear' as Fit['category'],
+    section: 'gallery' as Fit['section'],
     brands: '',
     description: 'Archive piece for the rotation. Real motion only.'
   });
@@ -41,7 +41,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
     }
   };
 
-  const getAutoName = (category: string, index: number) => {
+  const getAutoName = (category: string, isVideo: boolean, index: number) => {
     const prefixes: Record<string, string> = {
       streetwear: 'STREET',
       'avant-garde': 'ARCHIVE',
@@ -49,8 +49,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
       minimal: 'VOID'
     };
     const prefix = prefixes[category] || 'PIECE';
-    const num = 101 + index + Math.floor(Math.random() * 5);
-    return `${prefix} ${num}`;
+    const mediaSuffix = isVideo ? 'CLIP' : 'GRAIL';
+    const num = 101 + index + Math.floor(Math.random() * 10);
+    return `${prefix} ${mediaSuffix} ${num}`;
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,24 +64,30 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
+        const isVideo = file.type.startsWith('video/');
+        const resourceType = isVideo ? 'video' : 'image';
+        
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'real_unsigned');
 
-        const res = await fetch('https://api.cloudinary.com/v1_1/ds2mbrzcn/image/upload', {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/ds2mbrzcn/${resourceType}/upload`, {
           method: 'POST',
           body: formData,
         });
         const data = await res.json();
         
         if (data.secure_url) {
-          const autoName = getAutoName(batchConfig.category, stagedFits.length + uploadedAssets.length);
+          const autoName = getAutoName(batchConfig.category, isVideo, stagedFits.length + uploadedAssets.length);
           uploadedAssets.push({
             tempId: Math.random().toString(36).substr(2, 9),
             title: autoName,
-            imageUrl: data.secure_url,
+            imageUrl: isVideo ? data.thumbnail_url || data.secure_url.replace(/\.[^/.]+$/, ".jpg") : data.secure_url,
+            videoUrl: isVideo ? data.secure_url : undefined,
+            mediaType: isVideo ? 'video' : 'image',
+            section: batchConfig.section,
             category: batchConfig.category,
-            brands: batchConfig.brands.split(',').map(b => b.trim()),
+            brands: batchConfig.brands.split(',').map(b => b.trim()).filter(b => b !== ''),
             description: batchConfig.description,
             date: new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase()
           });
@@ -96,10 +103,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
     }
   };
 
-  const removeStaged = (tempId: string) => {
-    setStagedFits(prev => prev.filter(f => f.tempId !== tempId));
-  };
-
   const stampAllToVault = async () => {
     if (stagedFits.length === 0) return;
     setSaving(true);
@@ -110,6 +113,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
           title: staged.title,
           description: staged.description,
           imageUrl: staged.imageUrl,
+          videoUrl: staged.videoUrl || null,
+          mediaType: staged.mediaType,
+          section: staged.section,
           category: staged.category,
           brands: staged.brands,
           date: staged.date,
@@ -121,7 +127,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
       }
       setFits(prev => [...addedFits, ...prev]);
       setStagedFits([]);
-      alert(`SUCCESS: ${addedFits.length} GRAILS STAMPED TO THE VAULT.`);
+      alert(`SUCCESS: ${addedFits.length} ASSETS STAMPED TO THE VAULT.`);
     } catch (err) {
       console.error(err);
       alert('FIRESTORE ERROR DURING BATCH STAMP.');
@@ -131,24 +137,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
   };
 
   const deleteFit = async (id: string) => {
-    if (confirm('DELETE THIS BRICK FROM THE ARCHIVE? NO CAP?')) {
+    if (confirm('DELETE THIS BRICK? NO CAP?')) {
       try {
         await deleteDoc(doc(db, 'fits', id));
         setFits(prev => prev.filter(f => f.id !== id));
       } catch (err) {
         alert('COULD NOT WIPE THE MOTION.');
       }
-    }
-  };
-
-  const updateSetting = async (key: keyof SiteSettings, value: string) => {
-    const newSettings = { ...settings, [key]: value };
-    setSettings(newSettings);
-    try {
-      const settingsRef = doc(db, 'settings', 'global');
-      await updateDoc(settingsRef, { [key]: value });
-    } catch (err) {
-      console.error('Settings update failed:', err);
     }
   };
 
@@ -163,16 +158,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
           </div>
           <h2 className="text-3xl font-serif italic mb-8 tracking-tighter text-center">Wassup Gng. Tap In.</h2>
           <form onSubmit={handleLogin} className="space-y-6">
-            <div>
-              <label className="text-[10px] tracking-[0.4em] uppercase text-brand-bone/50 block mb-3 font-black">THE PASSCODE</label>
-              <input 
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-brand-obsidian border border-white/20 p-4 text-brand-bone focus:outline-none focus:border-brand-bone transition-all font-black tracking-widest"
-                placeholder="•••••"
-              />
-            </div>
+            <input 
+              type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-brand-obsidian border border-white/20 p-4 text-brand-bone focus:outline-none focus:border-brand-bone transition-all font-black tracking-widest"
+              placeholder="PASSCODE"
+            />
             {error && <p className="text-red-500 text-[10px] tracking-widest font-black uppercase text-center animate-pulse">{error}</p>}
             <button className="w-full py-4 bg-brand-bone text-brand-obsidian font-black tracking-[0.3em] uppercase hover:bg-white transition-all shadow-lg shadow-white/5">
               UNLOCK THE MOTION
@@ -190,107 +182,92 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
           <span className="text-[12px] tracking-[0.5em] text-brand-bone/50 uppercase block mb-4 font-black">SYSTEM STATUS: BATCH MOTION ACTIVE</span>
           <h2 className="text-6xl md:text-8xl font-serif italic tracking-tighter">Advanced CMS</h2>
         </div>
-        <button 
-          onClick={() => setIsAuthenticated(false)}
-          className="text-[11px] tracking-[0.4em] font-black uppercase text-red-500 border-2 border-red-500/30 px-8 py-4 hover:bg-red-500 hover:text-white transition-all italic"
-        >
-          Close Vault
-        </button>
+        <button onClick={() => setIsAuthenticated(false)} className="text-[11px] tracking-[0.4em] font-black uppercase text-red-500 border-2 border-red-500/30 px-8 py-4 hover:bg-red-500 transition-all italic">Close Vault</button>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
         <div className="lg:col-span-8 space-y-20">
           <section className="bg-brand-charcoal/50 p-8 border border-white/5 rounded-sm">
-            <h3 className="text-2xl font-serif italic mb-10 border-b border-white/10 pb-4 uppercase tracking-tighter">Drop Batch Heat</h3>
+            <h3 className="text-2xl font-serif italic mb-10 border-b border-white/10 pb-4 uppercase tracking-tighter">Drop Batch Assets</h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               <div className="space-y-6">
                 <div>
-                  <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black">Batch Category</label>
+                  <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black italic">Target Section</label>
+                  <div className="flex gap-4">
+                    <button 
+                      onClick={() => setBatchConfig({...batchConfig, section: 'gallery'})}
+                      className={`flex-1 py-3 text-[10px] tracking-[0.2em] uppercase font-black border transition-all ${batchConfig.section === 'gallery' ? 'bg-brand-bone text-brand-obsidian border-brand-bone' : 'border-white/10 text-brand-bone/40'}`}
+                    >
+                      Archive Gallery
+                    </button>
+                    <button 
+                      onClick={() => setBatchConfig({...batchConfig, section: 'fit-check'})}
+                      className={`flex-1 py-3 text-[10px] tracking-[0.2em] uppercase font-black border transition-all ${batchConfig.section === 'fit-check' ? 'bg-brand-bone text-brand-obsidian border-brand-bone' : 'border-white/10 text-brand-bone/40'}`}
+                    >
+                      Fit Checks
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black italic">Category</label>
                   <select 
                     value={batchConfig.category}
                     onChange={e => setBatchConfig({...batchConfig, category: e.target.value as any})}
                     className="w-full bg-brand-obsidian border border-white/10 p-4 focus:border-brand-bone/50 outline-none uppercase tracking-widest text-xs font-bold"
                   >
-                    <option value="streetwear">Streetwear (STREET 10X)</option>
-                    <option value="avant-garde">Avant-Garde (ARCHIVE 10X)</option>
-                    <option value="tailoring">Tailoring (SHARP 10X)</option>
-                    <option value="minimal">Minimal (VOID 10X)</option>
+                    <option value="streetwear">Streetwear</option>
+                    <option value="avant-garde">Avant-Garde</option>
+                    <option value="tailoring">Tailoring</option>
+                    <option value="minimal">Minimal</option>
                   </select>
                 </div>
+              </div>
+              <div className="space-y-6">
                 <div>
-                  <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black">Shared Brands</label>
-                  <input 
-                    type="text" 
-                    value={batchConfig.brands}
-                    onChange={e => setBatchConfig({...batchConfig, brands: e.target.value})}
-                    placeholder="Rick Owens, Nike, LV"
-                    className="w-full bg-brand-obsidian border border-white/10 p-4 focus:border-brand-bone/50 outline-none font-bold"
+                  <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black italic">Shared Description</label>
+                  <textarea 
+                    value={batchConfig.description}
+                    onChange={e => setBatchConfig({...batchConfig, description: e.target.value})}
+                    placeholder="Shared vibe..."
+                    className="w-full bg-brand-obsidian border border-white/10 p-4 focus:border-brand-bone/50 outline-none h-[140px] resize-none font-bold"
                   />
                 </div>
-              </div>
-              <div>
-                <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black">Shared Description</label>
-                <textarea 
-                  value={batchConfig.description}
-                  onChange={e => setBatchConfig({...batchConfig, description: e.target.value})}
-                  placeholder="The vibe for this drop..."
-                  className="w-full bg-brand-obsidian border border-white/10 p-4 focus:border-brand-bone/50 outline-none h-full min-h-[148px] resize-none font-bold"
-                />
               </div>
             </div>
 
             <div className="space-y-8">
-              <div className="relative">
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  multiple
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-                <button 
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className={`w-full py-12 border-2 border-dashed border-white/20 hover:border-brand-bone transition-all text-[14px] tracking-[0.4em] uppercase font-black flex flex-col items-center gap-4 ${uploading ? 'animate-pulse' : ''}`}
-                >
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M12 4V16M12 4L8 8M12 4L16 8M4 17V19C4 19.5523 4.44772 20 5 20H19C19.5523 20 20 19.5523 20 19V17" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  {uploading ? 'PUSHING TO CLOUDINARY...' : 'SELECT MULTIPLE PHOTOS GNG'}
-                </button>
-              </div>
+              <input type="file" accept="image/*,video/*" multiple ref={fileInputRef} onChange={handleFileUpload} className="hidden" />
+              <button 
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className={`w-full py-16 border-2 border-dashed border-white/20 hover:border-brand-bone transition-all text-[14px] tracking-[0.4em] uppercase font-black flex flex-col items-center gap-4 ${uploading ? 'animate-pulse' : ''}`}
+              >
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                {uploading ? 'PUSHING TO CLOUDINARY...' : 'DROP PHOTOS & VIDEOS TWIN'}
+              </button>
 
               {stagedFits.length > 0 && (
-                <div className="space-y-8 animate-in fade-in slide-in-from-top-4">
-                  <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                    <h4 className="text-[10px] tracking-[0.5em] uppercase font-black text-brand-bone/60">STAGING VAULT ({stagedFits.length})</h4>
-                    <button onClick={() => setStagedFits([])} className="text-[9px] tracking-[0.3em] uppercase font-black text-red-500 hover:underline">Clear All</button>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <div className="space-y-8 p-6 bg-brand-obsidian border border-white/5">
+                  <h4 className="text-[10px] tracking-[0.5em] uppercase font-black text-brand-bone/60">STAGING VAULT</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     {stagedFits.map(fit => (
-                      <div key={fit.tempId} className="relative aspect-square bg-brand-obsidian border border-white/10 group overflow-hidden">
-                        <img src={fit.imageUrl} className="w-full h-full object-cover grayscale brightness-50 group-hover:brightness-100 transition-all" />
-                        <div className="absolute inset-0 p-3 flex flex-col justify-between">
-                          <button onClick={() => removeStaged(fit.tempId!)} className="self-end text-red-500 bg-black/60 p-1 hover:bg-red-500 hover:text-white transition-all">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                              <path d="M18 6L6 18M6 6l12 12" />
-                            </svg>
-                          </button>
-                          <p className="text-[9px] tracking-widest font-black uppercase text-brand-bone truncate bg-black/60 p-1">{fit.title}</p>
-                        </div>
+                      <div key={fit.tempId} className="relative aspect-square bg-brand-charcoal overflow-hidden group">
+                        <img src={fit.imageUrl} className="w-full h-full object-cover grayscale brightness-50" />
+                        {fit.mediaType === 'video' && (
+                          <div className="absolute top-2 left-2 bg-brand-bone text-brand-obsidian p-1 rounded-sm">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                          </div>
+                        )}
+                        <button onClick={() => setStagedFits(prev => prev.filter(f => f.tempId !== fit.tempId))} className="absolute top-2 right-2 text-red-500 bg-black/60 p-1">X</button>
+                        <p className="absolute bottom-1 left-1 text-[8px] font-black uppercase text-brand-bone bg-black/60 px-1 truncate w-[90%]">{fit.title}</p>
                       </div>
                     ))}
                   </div>
-
-                  <button 
-                    onClick={stampAllToVault}
-                    disabled={saving}
-                    className="w-full py-8 bg-brand-bone text-brand-obsidian font-black tracking-[0.6em] uppercase hover:invert transition-all shadow-xl shadow-brand-bone/5 italic disabled:opacity-50"
-                  >
-                    {saving ? 'STAMPING TO FIRESTORE...' : `STAMP ${stagedFits.length} GRAILS TO VAULT`}
+                  <button onClick={stampAllToVault} disabled={saving} className="w-full py-6 bg-brand-bone text-brand-obsidian font-black tracking-[0.6em] uppercase hover:invert transition-all">
+                    {saving ? 'STAMPING...' : `STAMP ${stagedFits.length} ASSETS`}
                   </button>
                 </div>
               )}
@@ -298,21 +275,15 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
           </section>
 
           <section>
-            <h3 className="text-2xl font-serif italic mb-10 border-b border-white/10 pb-4 uppercase tracking-tighter">Rotation Archive</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <h3 className="text-2xl font-serif italic mb-10 border-b border-white/10 pb-4 uppercase tracking-tighter">Current Archive</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {fits.map(fit => (
-                <div key={fit.id} className="relative aspect-[4/5] bg-brand-charcoal border border-white/5 group overflow-hidden rounded-sm">
-                  <img src={fit.imageUrl} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-obsidian to-transparent opacity-80" />
-                  <div className="absolute bottom-0 left-0 w-full p-4">
-                    <h4 className="font-serif italic text-lg leading-tight mb-1">{fit.title}</h4>
-                    <p className="text-[8px] tracking-widest text-brand-bone/40 uppercase font-black mb-3 italic">{fit.category}</p>
-                    <button 
-                      onClick={() => deleteFit(fit.id)}
-                      className="text-[9px] tracking-[0.3em] font-black uppercase text-red-500 bg-black/40 px-3 py-2 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all w-full"
-                    >
-                      Delete Piece
-                    </button>
+                <div key={fit.id} className="relative aspect-[4/5] bg-brand-charcoal border border-white/5 group overflow-hidden">
+                  <img src={fit.imageUrl} className="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 flex flex-col justify-end">
+                    <h4 className="font-serif italic text-sm">{fit.title}</h4>
+                    <p className="text-[8px] tracking-widest text-brand-bone/50 uppercase mb-2">{fit.section}</p>
+                    <button onClick={() => deleteFit(fit.id)} className="text-[9px] font-black text-red-500 bg-black/60 py-1 border border-red-500/20">Wipe Piece</button>
                   </div>
                 </div>
               ))}
@@ -321,34 +292,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
         </div>
 
         <div className="lg:col-span-4 space-y-12">
-          <div className="sticky top-40 p-10 bg-brand-bone/5 border-2 border-white/10 rounded-sm">
-            <h3 className="text-2xl font-serif italic mb-8 border-b border-white/10 pb-4 uppercase tracking-tighter">Vision Manager</h3>
-            <div className="space-y-10">
+          <div className="sticky top-40 p-10 bg-brand-bone/5 border border-white/10">
+            <h3 className="text-2xl font-serif italic mb-8 border-b border-white/10 pb-4 uppercase tracking-tighter">Vision Config</h3>
+            <div className="space-y-8">
               <div>
-                <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-3 font-black italic">Home Page Slogan</label>
-                <input 
-                  type="text"
-                  value={settings.homeHeadline}
-                  onChange={e => updateSetting('homeHeadline', e.target.value)}
-                  className="w-full bg-brand-obsidian/40 border-b border-white/10 p-4 focus:border-brand-bone/50 outline-none text-sm font-black italic"
-                />
+                <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-3 font-black italic">Headline</label>
+                <input type="text" value={settings.homeHeadline} onChange={e => updateDoc(doc(db, 'settings', 'global'), {homeHeadline: e.target.value})} className="w-full bg-brand-obsidian/40 border-b border-white/10 p-3 text-sm font-black italic outline-none" />
               </div>
               <div>
-                <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-3 font-black italic">Manifesto Drop</label>
-                <textarea 
-                  value={settings.aboutManifesto}
-                  onChange={e => updateSetting('aboutManifesto', e.target.value)}
-                  className="w-full bg-brand-obsidian/40 border-b border-white/10 p-4 focus:border-brand-bone/50 outline-none text-sm font-black min-h-[140px] resize-none leading-relaxed"
-                />
-              </div>
-              <div>
-                <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-3 font-black italic">Footer Punchline</label>
-                <input 
-                  type="text"
-                  value={settings.footerTagline}
-                  onChange={e => updateSetting('footerTagline', e.target.value)}
-                  className="w-full bg-brand-obsidian/40 border-b border-white/10 p-4 focus:border-brand-bone/50 outline-none text-sm font-black italic"
-                />
+                <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-3 font-black italic">Manifesto</label>
+                <textarea value={settings.aboutManifesto} onChange={e => updateDoc(doc(db, 'settings', 'global'), {aboutManifesto: e.target.value})} className="w-full bg-brand-obsidian/40 border-b border-white/10 p-3 text-sm font-black min-h-[120px] outline-none" />
               </div>
             </div>
           </div>

@@ -3,11 +3,15 @@ export interface Fit {
   id: string;
   title: string;
   description: string;
-  imageUrl: string;
+  imageUrl: string; // Used as thumbnail for videos
+  videoUrl?: string;
+  mediaType: 'image' | 'video';
+  section: 'gallery' | 'fit-check';
   category: 'streetwear' | 'avant-garde' | 'tailoring' | 'minimal';
   brands: string[];
   instagramUrl?: string;
   date: string;
+  createdAt?: any;
 }
 
 export interface SiteSettings {
