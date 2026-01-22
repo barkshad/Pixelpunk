@@ -1,50 +1,79 @@
 
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
 
-// Initialize the GoogleGenAI client strictly using the environment variable for security and consistency.
 const getAI = () => {
   return new GoogleGenAI({ apiKey: process.env.API_KEY as string });
 };
 
-// Generates an aggressive, hype-focused fashion review for a specific outfit.
-export const generateStylingInsight = async (title: string, brands: string[]) => {
+// Generates the "Why it's Goated" manifesto for a fit
+export const generateGoatedStory = async (title: string, brands: string[], category: string) => {
   try {
     const ai = getAI();
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: `Give a high-hype, aggressive street-luxe fashion review (2 sentences max) for a fit called "${title}" with brands like ${brands.join(', ')}. 
-      Be strictly AGAINST mid fast fashion. Use heavy Gen Z slang, LA street talk, and AAVE. 
-      Terms to use: "tap in twin", "gng", "lit", "no cap", "on god", "motion", "it's giving", "heat", "brick", "dub", "main character", "grail". 
-      Make it sound like a legendary LA stylist talking to their best client. No emojis.`,
-      config: {
-        temperature: 1.0,
-        topP: 0.95,
-      }
+      model: 'gemini-2.5-pro',
+      contents: `You are Shadrack Baraka, a visionary LA fashion architect. 
+      Tell the deep, raw, and high-energy "story" of why this fit is a legendary GRAIL. 
+      Fit Title: "${title}"
+      Brands: ${brands.join(', ')}
+      Category: ${category}
+      
+      Requirements:
+      - Use heavy Gen Z/LA street slang (tap in twin, gng, on god, no cap, motion, brick, dub, grail).
+      - Explain why this specific combination of brands creates "main character energy".
+      - Be aggressive against "mid fast fashion".
+      - Structure it as a single immersive paragraph (max 4 sentences).
+      - No emojis.`,
     });
-    // Accessing .text property directly as per latest SDK guidelines.
-    return response.text || "This fit is straight lava, twin. You're really him for this one, no cap.";
+    return response.text || "This fit is straight lava gng, real motion only.";
   } catch (error) {
-    console.error("Gemini Error:", error);
-    return "This fit is straight gas, gng. Real motion only.";
+    console.error("Story Gen Error:", error);
+    return "This fit is straight gas, twin. Real motion only, no cap.";
   }
 };
 
-// Provides stylistic responses to user style inquiries using the Shadrack Baraka persona.
+// Analyzes fit data to suggest categorization and tags (Batch processing helper)
+export const analyzeFitMetadata = async (description: string) => {
+  try {
+    const ai = getAI();
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: `Analyze this fashion description: "${description}". 
+      Return a JSON object with:
+      - suggestedCategory: (one of: streetwear, avant-garde, tailoring, minimal)
+      - suggestedBrands: string array
+      - suggestedTitle: a 2-word hype title
+      - goatedManifesto: a 2-sentence aggressive hype review.`,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            suggestedCategory: { type: Type.STRING },
+            suggestedBrands: { type: Type.ARRAY, items: { type: Type.STRING } },
+            suggestedTitle: { type: Type.STRING },
+            goatedManifesto: { type: Type.STRING }
+          },
+          required: ["suggestedCategory", "suggestedBrands", "suggestedTitle", "goatedManifesto"]
+        }
+      }
+    });
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error("Analysis Error:", error);
+    return null;
+  }
+};
+
 export const generateStyleResponse = async (userMessage: string) => {
   try {
     const ai = getAI();
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.5-flash',
       contents: `You are Shadrack Baraka, the most legendary stylist in LA. 
-      You hate fast fashion—it's mid and a massive dub. You only mess with grails. 
-      A user asks: "${userMessage}". Reply with heavy Gen Z slang, LA street talk, and AAVE. 
-      Use phrases like "tap in twin", "wassup gng", "on god", "no cap", "straight heat". 
-      Be confident, serious, and sound like you're the main character. Max 3 sentences. No emojis.`,
+      Reply to: "${userMessage}". Use heavy slang, be confident. Max 3 sentences. No emojis.`,
     });
-    // Accessing .text property directly as per latest SDK guidelines.
-    return response.text || "Real style is forever, trends are a dub gng. Keep it 100 with your rotation, no cap.";
+    return response.text || "Real style is forever, trends are a dub gng.";
   } catch (error) {
-    console.error("Gemini Response Error:", error);
-    return "Real style is forever, trends are a dub. Keep it 100 with your rotation.";
+    return "Keep it 100 with your rotation.";
   }
 };

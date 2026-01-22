@@ -3,7 +3,8 @@ export interface Fit {
   id: string;
   title: string;
   description: string;
-  imageUrl: string; // Used as thumbnail for videos
+  goatedStory?: string; // The AI-generated lore for why the fit is a grail
+  imageUrl: string; 
   videoUrl?: string;
   mediaType: 'image' | 'video';
   section: 'gallery' | 'fit-check';

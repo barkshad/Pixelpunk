@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Fit } from '../types';
-import { generateStylingInsight } from '../services/geminiService';
 
 interface FitModalProps {
   fit: Fit | null;
@@ -9,19 +8,10 @@ interface FitModalProps {
 }
 
 const FitModal: React.FC<FitModalProps> = ({ fit, onClose }) => {
-  const [insight, setInsight] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     if (fit) {
-      setLoading(true);
-      generateStylingInsight(fit.title, fit.brands).then(res => {
-        setInsight(res);
-        setLoading(false);
-      });
       document.body.style.overflow = 'hidden';
     } else {
-      setInsight('');
       document.body.style.overflow = 'auto';
     }
     return () => { document.body.style.overflow = 'auto'; };
@@ -30,100 +20,98 @@ const FitModal: React.FC<FitModalProps> = ({ fit, onClose }) => {
   if (!fit) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-8 lg:p-16 bg-brand-obsidian animate-in fade-in duration-300">
-      <button 
-        onClick={onClose}
-        className="fixed top-6 right-6 md:top-12 md:right-12 text-brand-bone/60 hover:text-brand-bone transition-all group z-[250] bg-brand-obsidian/40 backdrop-blur-sm p-3 rounded-full border border-white/10"
-        aria-label="Close"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
-        </svg>
-      </button>
-
-      <div className="w-full h-full max-w-[1400px] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 overflow-y-auto no-scrollbar py-12 px-2 md:px-0">
-        {/* Media */}
-        <div className="lg:col-span-7">
-          <div className="w-full bg-brand-charcoal overflow-hidden border border-white/10 rounded-sm shadow-2xl relative">
-            {fit.mediaType === 'video' ? (
-              <video 
-                key={fit.videoUrl} 
-                src={fit.videoUrl} 
-                controls 
-                autoPlay 
-                muted
-                loop 
-                playsInline
-                webkit-playsinline="true"
-                crossOrigin="anonymous"
-                preload="auto"
-                className="w-full h-auto max-h-[85vh] object-contain bg-black"
-                poster={fit.imageUrl}
-              />
-            ) : (
-              <img 
-                src={fit.imageUrl} 
-                alt={fit.title} 
-                className="w-full h-auto object-cover"
-              />
-            )}
-          </div>
+    <div className="fixed inset-0 z-[200] bg-brand-obsidian animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto no-scrollbar">
+      {/* Dynamic Header */}
+      <nav className="sticky top-0 w-full z-[210] flex justify-between items-center px-6 md:px-12 py-8 bg-gradient-to-b from-brand-obsidian to-transparent">
+        <div className="flex flex-col">
+          <span className="text-[10px] tracking-[0.4em] font-black text-brand-bone/40 uppercase italic">Archive Entry #{fit.id.slice(-4)}</span>
+          <span className="text-[10px] tracking-[0.4em] font-black text-brand-bone uppercase">{fit.date} • {fit.category}</span>
         </div>
+        <button 
+          onClick={onClose}
+          className="bg-brand-bone text-brand-obsidian px-8 py-3 text-[10px] tracking-[0.4em] font-black uppercase italic hover:invert transition-all shadow-2xl"
+        >
+          Close Vision
+        </button>
+      </nav>
 
-        {/* Info */}
-        <div className="lg:col-span-5 flex flex-col justify-start lg:justify-center py-4">
-          <div className="max-w-xl">
-            <span className="text-[11px] tracking-[0.4em] uppercase text-brand-bone/60 block mb-6 font-bold italic">
-              {fit.section === 'fit-check' ? 'VIBE CHECK MOTION' : 'VAULT ARCHIVE'} • {fit.category}
-            </span>
-            
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-serif italic mb-8 leading-[1.1] tracking-tight">
-              {fit.title}
-            </h2>
-
-            <div className="space-y-10">
-              <div className="border-l-2 border-white/30 pl-6">
-                <h4 className="text-[11px] tracking-[0.3em] uppercase text-brand-bone/60 mb-3 font-bold">THE VERDICT</h4>
-                <p className="text-brand-bone/90 text-base md:text-lg leading-relaxed font-normal">
-                  {fit.description}
-                </p>
+      <div className="max-w-[1800px] mx-auto px-6 md:px-12 pb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+          
+          {/* Main Visual - Fixed for Mobile */}
+          <div className="lg:col-span-7">
+            <div className="relative aspect-[4/5] lg:aspect-[3/4] bg-brand-charcoal overflow-hidden border border-white/5 shadow-[0_0_100px_rgba(255,255,255,0.05)] rounded-sm">
+              {fit.mediaType === 'video' ? (
+                <video 
+                  src={fit.videoUrl} 
+                  autoPlay 
+                  muted 
+                  loop 
+                  playsInline 
+                  webkit-playsinline="true"
+                  crossOrigin="anonymous"
+                  preload="auto"
+                  className="w-full h-full object-cover"
+                  poster={fit.imageUrl}
+                />
+              ) : (
+                <img src={fit.imageUrl} alt={fit.title} className="w-full h-full object-cover" />
+              )}
+              
+              <div className="absolute bottom-8 left-8 right-8 flex justify-between items-end pointer-events-none">
+                 <div className="flex flex-col gap-2">
+                    {fit.brands.map((b, i) => (
+                      <span key={i} className="text-[10px] md:text-[12px] tracking-[0.3em] font-black uppercase text-brand-bone bg-brand-obsidian/80 px-4 py-2 border border-white/10 backdrop-blur-md w-fit">
+                        {b}
+                      </span>
+                    ))}
+                 </div>
               </div>
+            </div>
+          </div>
 
-              <div>
-                <h4 className="text-[11px] tracking-[0.3em] uppercase text-brand-bone/60 mb-5 font-bold">BRANDS</h4>
-                <div className="flex flex-wrap gap-2.5">
-                  {fit.brands.map((brand, i) => (
-                    <span key={i} className="px-4 py-2 bg-white/5 border border-white/10 text-[10px] md:text-[11px] tracking-widest text-brand-bone uppercase font-black">
-                      {brand}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          {/* Story Content */}
+          <div className="lg:col-span-5 flex flex-col justify-center">
+            <div className="mb-12">
+               <div className="inline-block px-4 py-1 bg-red-900 text-brand-bone text-[10px] tracking-[0.4em] font-black uppercase italic mb-8">
+                  REAL MOTION ONLY
+               </div>
+               <h2 className="text-6xl md:text-8xl lg:text-9xl font-serif italic mb-10 tracking-tighter leading-none">
+                  {fit.title}
+               </h2>
+               
+               <div className="space-y-12">
+                  <div className="border-l-4 border-brand-bone/30 pl-10">
+                     <h4 className="text-[12px] tracking-[0.5em] text-brand-bone/40 uppercase font-black mb-6 italic underline decoration-brand-bone/10 underline-offset-8">The Manifesto</h4>
+                     <p className="text-2xl md:text-3xl lg:text-4xl font-serif leading-tight text-brand-bone italic tracking-tight">
+                        "{fit.description}"
+                     </p>
+                  </div>
 
-              <div className="pt-8 border-t border-white/10">
-                <h4 className="text-[11px] tracking-[0.3em] uppercase text-brand-bone/70 mb-5 font-bold flex items-center gap-2 italic font-black">
-                  <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
-                  BARAKA'S VERDICT
-                </h4>
-                <div className="min-h-[80px]">
-                  {loading ? (
-                    <p className="text-brand-bone/50 text-sm animate-pulse tracking-widest uppercase font-black">PROCESSING THE MOTION...</p>
-                  ) : (
-                    <p className="text-xl md:text-3xl font-serif italic text-brand-bone/90 leading-snug">
-                      "{insight}"
-                    </p>
-                  )}
-                </div>
-              </div>
+                  <div className="p-10 bg-white/[0.03] border border-white/5 relative group overflow-hidden">
+                     <div className="absolute top-0 right-0 p-4">
+                        <span className="text-[8px] tracking-[0.5em] text-brand-bone/20 font-black uppercase italic">AI VERDICT ENGINE v2.5</span>
+                     </div>
+                     <h4 className="text-[12px] tracking-[0.5em] text-brand-bone uppercase font-black mb-8 flex items-center gap-4 italic">
+                        <span className="w-3 h-3 bg-brand-bone rounded-full animate-pulse" />
+                        Why It's Goated
+                     </h4>
+                     <p className="text-lg md:text-xl lg:text-2xl font-bold leading-relaxed text-brand-bone/90 tracking-tight">
+                        {fit.goatedStory || "The lore for this piece is still being archived. Check back when the motion is fully indexed twin."}
+                     </p>
+                  </div>
 
-              <div className="pt-6 pb-12">
-                <button 
-                  onClick={onClose}
-                  className="inline-flex items-center gap-4 text-[12px] tracking-[0.4em] font-black text-brand-bone border-2 border-white/20 px-10 py-4 hover:bg-brand-bone hover:text-brand-obsidian transition-all uppercase italic"
-                >
-                  Close Archive
-                </button>
-              </div>
+                  <div className="grid grid-cols-2 gap-12 pt-12 border-t border-white/10">
+                     <div>
+                        <span className="text-[10px] tracking-[0.4em] text-brand-bone/30 uppercase font-black block mb-4">Rarity</span>
+                        <p className="text-lg font-serif italic uppercase tracking-widest">Archival Grail</p>
+                     </div>
+                     <div>
+                        <span className="text-[10px] tracking-[0.4em] text-brand-bone/30 uppercase font-black block mb-4">Vision</span>
+                        <p className="text-lg font-serif italic uppercase tracking-widest">Main Character</p>
+                     </div>
+                  </div>
+               </div>
             </div>
           </div>
         </div>
