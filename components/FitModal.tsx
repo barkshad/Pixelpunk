@@ -22,7 +22,7 @@ const FitModal: React.FC<FitModalProps> = ({ fit, onClose }) => {
   return (
     <div className="fixed inset-0 z-[200] bg-brand-obsidian animate-in fade-in slide-in-from-bottom-4 duration-500 overflow-y-auto no-scrollbar">
       {/* Dynamic Header */}
-      <nav className="sticky top-0 w-full z-[210] flex justify-between items-center px-6 md:px-12 py-8 bg-gradient-to-b from-brand-obsidian to-transparent">
+      <nav className="sticky top-0 w-full z-[210] flex justify-between items-center px-6 md:px-12 py-8 bg-gradient-to-b from-brand-obsidian via-brand-obsidian/80 to-transparent backdrop-blur-sm lg:backdrop-blur-none">
         <div className="flex flex-col">
           <span className="text-[10px] tracking-[0.4em] font-black text-brand-bone/40 uppercase italic">Archive Entry #{fit.id.slice(-4)}</span>
           <span className="text-[10px] tracking-[0.4em] font-black text-brand-bone uppercase">{fit.date} • {fit.category}</span>
