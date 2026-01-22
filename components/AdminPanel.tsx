@@ -1,6 +1,8 @@
 
 import React, { useState, useRef } from 'react';
 import { Fit, SiteSettings } from '../types';
+import { db } from '../services/firebase';
+import { collection, addDoc, deleteDoc, doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
 interface AdminPanelProps {
   fits: Fit[];
@@ -14,6 +16,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [newFit, setNewFit] = useState<Partial<Fit>>({
@@ -45,7 +48,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
     formData.append('upload_preset', 'real_unsigned');
 
     try {
-      // Cloudinary upload logic as per Master Instructions
+      // Direct Cloudinary upload (ds2mbrzcn)
       const res = await fetch('https://api.cloudinary.com/v1_1/ds2mbrzcn/image/upload', {
         method: 'POST',
         body: formData,
@@ -53,39 +56,71 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
       const data = await res.json();
       if (data.secure_url) {
         setNewFit(prev => ({ ...prev, imageUrl: data.secure_url }));
-        alert('IMAGE UPLOADED TO THE CLOUD, ON GOD.');
+        alert('IMAGE UPLOADED TO CLOUDINARY. METADATA PENDING...');
       }
     } catch (err) {
       console.error(err);
-      alert('UPLOAD FAILED GNG. TRY AGAIN.');
+      alert('UPLOAD FAILED GNG.');
     } finally {
       setUploading(false);
     }
   };
 
-  const deleteFit = (id: string) => {
+  const deleteFit = async (id: string) => {
     if (confirm('DELETE THIS BRICK FROM THE ARCHIVE? NO CAP?')) {
-      setFits(prev => prev.filter(f => f.id !== id));
+      try {
+        await deleteDoc(doc(db, 'fits', id));
+        setFits(prev => prev.filter(f => f.id !== id));
+      } catch (err) {
+        alert('COULD NOT WIPE THE MOTION. TRY AGAIN.');
+      }
     }
   };
 
-  const addFit = (e: React.FormEvent) => {
+  const addFit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newFit.imageUrl) return alert('UPLOAD SOME HEAT FIRST TWIN.');
     
-    const id = Date.now().toString();
-    const brandsArray = typeof newFit.brands === 'string' 
-      ? (newFit.brands as string).split(',').map(b => b.trim()) 
-      : newFit.brands;
+    setSaving(true);
+    try {
+      const brandsArray = typeof newFit.brands === 'string' 
+        ? (newFit.brands as string).split(',').map(b => b.trim()) 
+        : newFit.brands;
 
-    const fitToAdd = { ...newFit, id, brands: brandsArray } as Fit;
-    setFits(prev => [fitToAdd, ...prev]);
-    setNewFit({ title: '', category: 'streetwear', brands: [], description: '', imageUrl: '', date: newFit.date });
-    alert('NEW GRAIL ADDED TO THE ROTATION TWIN.');
+      const fitMetadata = {
+        title: newFit.title,
+        description: newFit.description,
+        imageUrl: newFit.imageUrl,
+        category: newFit.category,
+        brands: brandsArray,
+        date: newFit.date,
+        createdAt: serverTimestamp()
+      };
+
+      // Store ONLY metadata in Firestore
+      const docRef = await addDoc(collection(db, 'fits'), fitMetadata);
+      
+      const fitWithId = { ...fitMetadata, id: docRef.id } as Fit;
+      setFits(prev => [fitWithId, ...prev]);
+      setNewFit({ title: '', category: 'streetwear', brands: [], description: '', imageUrl: '', date: newFit.date });
+      alert('GRAIL STAMPED IN THE VAULT GNG.');
+    } catch (err) {
+      console.error(err);
+      alert('FIRESTORE ERROR. COULD NOT STAMP THE METADATA.');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const updateSetting = (key: keyof SiteSettings, value: string) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+  const updateSetting = async (key: keyof SiteSettings, value: string) => {
+    const newSettings = { ...settings, [key]: value };
+    setSettings(newSettings);
+    try {
+      const settingsRef = doc(db, 'settings', 'global');
+      await updateDoc(settingsRef, { [key]: value });
+    } catch (err) {
+      console.error('Settings update failed:', err);
+    }
   };
 
   if (!isAuthenticated) {
@@ -123,7 +158,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
     <div className="min-h-screen pt-36 pb-24 px-6 md:px-12 max-w-[1600px] mx-auto fade-in">
       <header className="mb-20 border-b-2 border-white/10 pb-10 flex flex-col md:flex-row justify-between items-end gap-6">
         <div>
-          <span className="text-[12px] tracking-[0.5em] text-brand-bone/50 uppercase block mb-4 font-black">SYSTEM STATUS: FULL MOTION</span>
+          <span className="text-[12px] tracking-[0.5em] text-brand-bone/50 uppercase block mb-4 font-black">SYSTEM STATUS: FULL MOTION (FIRESTORE)</span>
           <h2 className="text-6xl md:text-8xl font-serif italic tracking-tighter">Advanced CMS</h2>
         </div>
         <button 
@@ -135,7 +170,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-        {/* Left Side: Fit Management */}
         <div className="lg:col-span-8 space-y-20">
           <section className="bg-brand-charcoal/50 p-8 border border-white/5 rounded-sm">
             <h3 className="text-2xl font-serif italic mb-10 border-b border-white/10 pb-4 uppercase tracking-tighter">Upload New Heat</h3>
@@ -153,7 +187,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black">Media Asset</label>
+                  <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-2 font-black">Media Asset (Cloudinary Direct)</label>
                   <div className="flex flex-col gap-4">
                     <input 
                       type="file" 
@@ -167,13 +201,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                       onClick={() => fileInputRef.current?.click()}
                       className={`w-full py-4 border-2 border-dashed border-white/20 hover:border-brand-bone transition-all text-[11px] tracking-[0.2em] uppercase font-black ${uploading ? 'animate-pulse text-brand-bone/50' : ''}`}
                     >
-                      {uploading ? 'UPLOADING TO CLOUDINARY...' : newFit.imageUrl ? 'SWAP THE PHOTO' : 'SELECT PHOTO GNG'}
+                      {uploading ? 'PUSHING TO CLOUDINARY...' : newFit.imageUrl ? 'SWAP THE PHOTO' : 'SELECT PHOTO GNG'}
                     </button>
                     {newFit.imageUrl && (
                       <div className="aspect-square bg-brand-obsidian border border-white/10 overflow-hidden relative group">
                         <img src={newFit.imageUrl} alt="Preview" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span className="text-[10px] tracking-widest font-black uppercase italic">Previewing the Heat</span>
+                          <span className="text-[10px] tracking-widest font-black uppercase italic">Vibe Check Passed</span>
                         </div>
                       </div>
                     )}
@@ -216,8 +250,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                 </div>
               </div>
               <div className="md:col-span-2">
-                <button className="w-full py-8 bg-brand-bone text-brand-obsidian font-black tracking-[0.6em] uppercase hover:invert transition-all shadow-xl shadow-brand-bone/5 italic">
-                  Drop to the Streets
+                <button 
+                  disabled={saving || uploading}
+                  className="w-full py-8 bg-brand-bone text-brand-obsidian font-black tracking-[0.6em] uppercase hover:invert transition-all shadow-xl shadow-brand-bone/5 italic disabled:opacity-50"
+                >
+                  {saving ? 'STAMPING FIRESTORE...' : 'Drop to the Streets'}
                 </button>
               </div>
             </form>
@@ -246,7 +283,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
           </section>
         </div>
 
-        {/* Right Side: Site Text Settings */}
         <div className="lg:col-span-4 space-y-12">
           <div className="sticky top-40 p-10 bg-brand-bone/5 border-2 border-white/10 rounded-sm">
             <h3 className="text-2xl font-serif italic mb-8 border-b border-white/10 pb-4 uppercase tracking-tighter">The Vision Manager</h3>

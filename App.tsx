@@ -8,37 +8,68 @@ import Contact from './pages/Contact';
 import AdminPanel from './components/AdminPanel';
 import { ViewState, Fit, SiteSettings } from './types';
 import { FITS_DATA } from './constants';
+import { db } from './services/firebase';
+import { collection, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('home');
-  
-  // Dynamic data managed by CMS
-  const [fits, setFits] = useState<Fit[]>(() => {
-    const saved = localStorage.getItem('_pixelpunk_fits');
-    return saved ? JSON.parse(saved) : FITS_DATA;
+  const [fits, setFits] = useState<Fit[]>([]);
+  const [settings, setSettings] = useState<SiteSettings>({
+    homeHeadline: "Fuck Fast Fashion.",
+    aboutManifesto: "Motion is forever. Trends are mid. This is my language. I stay selective twin.",
+    footerTagline: "FUCK FAST FASHION TWIN."
   });
+  const [loading, setLoading] = useState(true);
 
-  const [settings, setSettings] = useState<SiteSettings>(() => {
-    const saved = localStorage.getItem('_pixelpunk_settings');
-    return saved ? JSON.parse(saved) : {
-      homeHeadline: "Fuck Fast Fashion.",
-      aboutManifesto: "Motion is forever. Trends are mid. This is my language. I stay selective twin.",
-      footerTagline: "FUCK FAST FASHION TWIN."
+  // Initial Load from Firestore
+  useEffect(() => {
+    const initApp = async () => {
+      try {
+        // Fetch Settings
+        const settingsRef = doc(db, 'settings', 'global');
+        const settingsSnap = await getDoc(settingsRef);
+        if (settingsSnap.exists()) {
+          setSettings(settingsSnap.data() as SiteSettings);
+        } else {
+          // Initialize settings if not exists
+          await setDoc(settingsRef, settings);
+        }
+
+        // Fetch Fits
+        const fitsSnap = await getDocs(collection(db, 'fits'));
+        const fitsData = fitsSnap.docs.map(d => ({ ...d.data(), id: d.id })) as Fit[];
+        
+        if (fitsData.length > 0) {
+          setFits(fitsData);
+        } else {
+          // Default data if DB is empty
+          setFits(FITS_DATA);
+        }
+      } catch (err) {
+        console.error("Firestore Init Error:", err);
+        setFits(FITS_DATA); // Fallback to hardcoded constants
+      } finally {
+        setLoading(false);
+      }
     };
-  });
 
-  // Persist changes
-  useEffect(() => {
-    localStorage.setItem('_pixelpunk_fits', JSON.stringify(fits));
-  }, [fits]);
-
-  useEffect(() => {
-    localStorage.setItem('_pixelpunk_settings', JSON.stringify(settings));
-  }, [settings]);
+    initApp();
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-brand-obsidian flex items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-16 h-[2px] bg-brand-bone animate-pulse" />
+          <p className="text-[10px] tracking-[0.5em] text-brand-bone/50 uppercase font-black italic">PULLING FROM THE VAULT...</p>
+        </div>
+      </div>
+    );
+  }
 
   const renderView = () => {
     switch (view) {
