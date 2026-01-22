@@ -44,13 +44,16 @@ const FitModal: React.FC<FitModalProps> = ({ fit, onClose }) => {
       <div className="w-full h-full max-w-[1400px] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 overflow-y-auto no-scrollbar py-12 px-2 md:px-0">
         {/* Media */}
         <div className="lg:col-span-7">
-          <div className="w-full bg-brand-charcoal overflow-hidden border border-white/10 rounded-sm">
+          <div className="w-full bg-brand-charcoal overflow-hidden border border-white/10 rounded-sm shadow-2xl">
             {fit.mediaType === 'video' ? (
               <video 
+                key={fit.videoUrl} // Force re-mount when fit changes to fix black screen bug
                 src={fit.videoUrl} 
                 controls 
                 autoPlay 
                 loop 
+                playsInline
+                crossOrigin="anonymous"
                 className="w-full h-auto max-h-[85vh] object-contain bg-black"
                 poster={fit.imageUrl}
               />

@@ -19,6 +19,7 @@ const Home: React.FC<{ setView: (v: any) => void, settings: SiteSettings }> = ({
             muted
             loop
             playsInline
+            crossOrigin="anonymous"
             className="w-full h-full object-cover grayscale opacity-30 scale-[1.05]"
           />
         ) : (

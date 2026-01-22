@@ -16,14 +16,13 @@ const FitCard: React.FC<FitCardProps> = ({ fit, onClick }) => {
     const options = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.5, // Trigger when 50% of the video is visible
+      threshold: 0.5,
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           videoRef.current?.play().catch((err) => {
-            // Browsers might block auto-play if not muted or other policies
             console.warn("Autoplay prevented:", err);
           });
         } else {
@@ -39,7 +38,7 @@ const FitCard: React.FC<FitCardProps> = ({ fit, onClick }) => {
         observer.unobserve(videoRef.current);
       }
     };
-  }, [fit.mediaType]);
+  }, [fit.mediaType, fit.videoUrl]); // Added videoUrl dependency for safety
 
   return (
     <div 
@@ -56,6 +55,7 @@ const FitCard: React.FC<FitCardProps> = ({ fit, onClick }) => {
               muted 
               loop 
               playsInline
+              crossOrigin="anonymous"
               className="w-full h-full object-cover transition-opacity duration-700 opacity-90 group-hover:opacity-100"
             />
             {/* Play overlay for visual feedback on video type */}
