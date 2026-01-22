@@ -408,7 +408,14 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                     </button>
                     {localSettings.heroVideoUrl && (
                       <div className="aspect-video bg-black/40 rounded-sm overflow-hidden border border-white/10">
-                         <video src={localSettings.heroVideoUrl} muted autoPlay loop className="w-full h-full object-cover grayscale opacity-50" />
+                         <video 
+                          src={localSettings.heroVideoUrl} 
+                          muted 
+                          autoPlay 
+                          loop 
+                          playsInline 
+                          className="w-full h-full object-cover grayscale-[0.4] opacity-70 contrast-125" 
+                         />
                       </div>
                     )}
                   </div>
