@@ -270,7 +270,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
                        </div>
                        {localSettings.heroVideoUrl && (
                         <div className="aspect-video bg-black/40 border border-white/10 overflow-hidden relative group">
-                          <video src={localSettings.heroVideoUrl} muted autoPlay loop playsInline className="w-full h-full object-cover grayscale opacity-50" />
+                          <video src={localSettings.heroVideoUrl} muted autoPlay loop playsInline webkit-playsinline="true" preload="auto" className="w-full h-full object-cover grayscale opacity-50" />
                           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/60">
                              <span className="text-[8px] tracking-widest font-black uppercase">ACTIVE VISUAL</span>
                           </div>

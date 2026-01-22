@@ -18,7 +18,9 @@ const Home: React.FC<{ setView: (v: any) => void, settings: SiteSettings }> = ({
             muted
             loop
             playsInline
+            webkit-playsinline="true"
             crossOrigin="anonymous"
+            preload="auto"
             className="w-full h-full object-cover grayscale-[0.4] opacity-60 contrast-125 brightness-110 transition-opacity duration-1000"
           />
         ) : (

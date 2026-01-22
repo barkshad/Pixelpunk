@@ -16,7 +16,7 @@ const FitCard: React.FC<FitCardProps> = ({ fit, onClick }) => {
     const options = {
       root: null,
       rootMargin: '0px',
-      threshold: 0.5,
+      threshold: 0.1, // Trigger earlier for smoother mobile experience
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -38,7 +38,7 @@ const FitCard: React.FC<FitCardProps> = ({ fit, onClick }) => {
         observer.unobserve(videoRef.current);
       }
     };
-  }, [fit.mediaType, fit.videoUrl]); // Added videoUrl dependency for safety
+  }, [fit.mediaType, fit.videoUrl]);
 
   return (
     <div 
@@ -55,12 +55,15 @@ const FitCard: React.FC<FitCardProps> = ({ fit, onClick }) => {
               muted 
               loop 
               playsInline
+              autoPlay
+              webkit-playsinline="true"
               crossOrigin="anonymous"
+              preload="auto"
               className="w-full h-full object-cover transition-opacity duration-700 opacity-90 group-hover:opacity-100"
             />
             {/* Play overlay for visual feedback on video type */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-12 h-12 rounded-full border border-white/20 bg-black/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="w-12 h-12 rounded-full border border-white/20 bg-brand-obsidian/40 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-brand-bone">
                   <path d="M8 5v14l11-7z" />
                 </svg>
