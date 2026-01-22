@@ -6,7 +6,6 @@ const About: React.FC<{ settings: SiteSettings }> = ({ settings }) => {
   return (
     <section className="min-h-screen pt-32 md:pt-48 pb-24 px-6 md:px-12 max-w-[1600px] mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-24 lg:gap-32 items-start">
-        {/* Visual Anchor */}
         <div className="lg:col-span-5 fade-in">
           <div className="aspect-[4/6] bg-brand-charcoal overflow-hidden border border-white/10 rounded-sm shadow-2xl">
             <img 
@@ -21,12 +20,11 @@ const About: React.FC<{ settings: SiteSettings }> = ({ settings }) => {
           </div>
         </div>
 
-        {/* Text Content */}
         <div className="lg:col-span-7 pt-4 lg:pt-16 flex flex-col">
           <div className="mb-8 inline-block w-fit px-4 py-1 bg-red-900 text-brand-bone text-[10px] tracking-[0.4em] font-black uppercase italic shadow-lg shadow-red-900/20">
             FUCK FAST FASHION GNG
           </div>
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-12 lg:mb-16 tracking-tighter">
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-serif leading-[1.1] mb-12 lg:mb-16 tracking-tighter">
             {settings.aboutManifesto}
           </h2>
           
@@ -34,20 +32,17 @@ const About: React.FC<{ settings: SiteSettings }> = ({ settings }) => {
             <div className="space-y-8">
               <div className="border-l-4 border-brand-bone/30 pl-6 lg:pl-10 space-y-6">
                 <p className="text-brand-bone text-2xl md:text-3xl leading-tight font-black tracking-tight italic">
-                  "They buying hype, we buying grails. On god."
+                  "{settings.aboutQuote}"
                 </p>
                 <p className="text-brand-bone/80 text-base md:text-xl leading-relaxed font-bold">
-                  This space is a hard rejection of mid fits and brick energy. Every piece here is picked with the vision, worn with purpose, and archived because it's a grail. Real motion only, no cap.
+                  {settings.aboutBody1}
                 </p>
               </div>
             </div>
             
             <div className="space-y-8">
               <p className="text-brand-bone/80 text-base md:text-lg leading-relaxed font-semibold">
-                Shadrack Baraka is really outside, fighting against the throwaway culture. He only messes with looks that hit different every single time you step out.
-              </p>
-              <p className="text-brand-bone/80 text-base md:text-lg leading-relaxed font-semibold">
-                This is fashion without the rush. Style without the mid energy. Motion without the trends. We stay movin' different gng.
+                {settings.aboutBody2}
               </p>
             </div>
           </div>

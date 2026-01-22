@@ -16,7 +16,14 @@ const App: React.FC = () => {
   const [fits, setFits] = useState<Fit[]>(FITS_DATA);
   const [settings, setSettings] = useState<SiteSettings>({
     homeHeadline: "Fuck Fast Fashion.",
+    homeSubheadline: "WE REALLY OUTSIDE GNG",
+    homeDescription: "Grails picked for the vision, not for the trends. The vault of Shadrack Baraka — He's Him, no cap.",
     aboutManifesto: "Motion is forever. Trends are mid. This is my language. I stay selective twin.",
+    aboutQuote: "They buying hype, we buying grails. On god.",
+    aboutBody1: "This space is a hard rejection of mid fits and brick energy. Every piece here is picked with the vision, worn with purpose, and archived because it's a grail. Real motion only, no cap.",
+    aboutBody2: "Shadrack Baraka is really outside, fighting against the throwaway culture. He only messes with looks that hit different every single time you step out.",
+    contactHeadline: "Tap In Twin",
+    contactDescription: "Need to fix your rotation gng? Tap in with the AI stylist to get the vision. No brick fits allowed, on god.",
     footerTagline: "FUCK FAST FASHION TWIN.",
     heroVideoUrl: ""
   });
@@ -25,18 +32,15 @@ const App: React.FC = () => {
   useEffect(() => {
     const initApp = async () => {
       try {
-        // Fetch Settings
         const settingsRef = doc(db, 'settings', 'global');
         const settingsSnap = await getDoc(settingsRef).catch(() => null);
         
         if (settingsSnap && settingsSnap.exists()) {
-          setSettings(settingsSnap.data() as SiteSettings);
+          setSettings(prev => ({ ...prev, ...settingsSnap.data() }));
         } else {
-          // Initialize if missing
-          setDoc(settingsRef, settings).catch(e => console.warn("Settings init skipped:", e));
+          await setDoc(settingsRef, settings).catch(e => console.warn("Settings init skipped:", e));
         }
 
-        // Fetch Fits
         const fitsSnap = await getDocs(collection(db, 'fits')).catch(() => null);
         if (fitsSnap && !fitsSnap.empty) {
           const fitsData = fitsSnap.docs.map(d => ({ ...d.data(), id: d.id })) as Fit[];
@@ -50,7 +54,6 @@ const App: React.FC = () => {
     };
 
     initApp();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -73,7 +76,7 @@ const App: React.FC = () => {
       case 'home': return <Home setView={setView} settings={settings} />;
       case 'fits': return <Fits fits={fits} />;
       case 'about': return <About settings={settings} />;
-      case 'contact': return <Contact />;
+      case 'contact': return <Contact settings={settings} />;
       case 'admin': return <AdminPanel fits={fits} setFits={setFits} settings={settings} setSettings={setSettings} />;
       default: return <Home setView={setView} settings={settings} />;
     }

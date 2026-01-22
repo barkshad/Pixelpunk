@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { generateStyleResponse } from '../services/geminiService';
+import { SiteSettings } from '../types';
 
-const Contact: React.FC = () => {
+const Contact: React.FC<{ settings: SiteSettings }> = ({ settings }) => {
   const [msg, setMsg] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,12 +20,13 @@ const Contact: React.FC = () => {
   return (
     <section className="min-h-screen pt-36 md:pt-48 pb-24 px-6 md:px-12 max-w-[1600px] mx-auto flex flex-col justify-center">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32 items-start">
-        {/* Contact Info */}
         <div className="lg:col-span-5">
           <div className="mb-8 inline-block w-fit px-4 py-1 bg-brand-bone text-brand-obsidian text-[10px] tracking-[0.4em] font-black uppercase italic">
             WASSUP GNG
           </div>
-          <h2 className="text-7xl md:text-9xl font-serif italic mb-16 tracking-tighter">Tap In Twin</h2>
+          <h2 className="text-5xl md:text-7xl lg:text-9xl font-serif italic mb-16 tracking-tighter">
+            {settings.contactHeadline}
+          </h2>
           
           <div className="space-y-16">
             <div>
@@ -58,13 +60,12 @@ const Contact: React.FC = () => {
           </div>
         </div>
 
-        {/* AI System */}
         <div className="lg:col-span-7 bg-brand-charcoal border-2 border-white/[0.1] p-10 md:p-16 relative rounded-sm shadow-2xl">
           <div className="max-w-xl mx-auto">
             <header className="mb-10 border-b border-white/10 pb-10">
               <h3 className="text-3xl font-serif italic mb-4 tracking-tighter">THE STYLE CONSULT</h3>
               <p className="text-base md:text-lg text-brand-bone/70 leading-relaxed font-bold italic">
-                Need to fix your rotation gng? Tap in with the AI stylist to get the vision. No brick fits allowed, on god.
+                {settings.contactDescription}
               </p>
             </header>
             

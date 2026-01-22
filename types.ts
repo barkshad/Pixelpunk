@@ -16,7 +16,14 @@ export interface Fit {
 
 export interface SiteSettings {
   homeHeadline: string;
+  homeSubheadline: string;
+  homeDescription: string;
   aboutManifesto: string;
+  aboutQuote: string;
+  aboutBody1: string;
+  aboutBody2: string;
+  contactHeadline: string;
+  contactDescription: string;
   footerTagline: string;
   heroVideoUrl?: string;
 }
