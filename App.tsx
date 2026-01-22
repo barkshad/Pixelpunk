@@ -13,7 +13,7 @@ import { collection, getDocs, doc, getDoc, setDoc } from 'firebase/firestore';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewState>('home');
-  const [fits, setFits] = useState<Fit[]>([]);
+  const [fits, setFits] = useState<Fit[]>(FITS_DATA);
   const [settings, setSettings] = useState<SiteSettings>({
     homeHeadline: "Fuck Fast Fashion.",
     aboutManifesto: "Motion is forever. Trends are mid. This is my language. I stay selective twin.",
@@ -21,39 +21,36 @@ const App: React.FC = () => {
   });
   const [loading, setLoading] = useState(true);
 
-  // Initial Load from Firestore
   useEffect(() => {
     const initApp = async () => {
       try {
-        // Fetch Settings
+        // Fetch Settings with timeout/fallback logic
         const settingsRef = doc(db, 'settings', 'global');
-        const settingsSnap = await getDoc(settingsRef);
-        if (settingsSnap.exists()) {
+        const settingsSnap = await getDoc(settingsRef).catch(() => null);
+        
+        if (settingsSnap && settingsSnap.exists()) {
           setSettings(settingsSnap.data() as SiteSettings);
         } else {
-          // Initialize settings if not exists
-          await setDoc(settingsRef, settings);
+          // Attempt to initialize if missing, but don't block on failure
+          setDoc(settingsRef, settings).catch(e => console.warn("Settings init skipped:", e));
         }
 
         // Fetch Fits
-        const fitsSnap = await getDocs(collection(db, 'fits'));
-        const fitsData = fitsSnap.docs.map(d => ({ ...d.data(), id: d.id })) as Fit[];
-        
-        if (fitsData.length > 0) {
+        const fitsSnap = await getDocs(collection(db, 'fits')).catch(() => null);
+        if (fitsSnap && !fitsSnap.empty) {
+          const fitsData = fitsSnap.docs.map(d => ({ ...d.data(), id: d.id })) as Fit[];
           setFits(fitsData);
-        } else {
-          // Default data if DB is empty
-          setFits(FITS_DATA);
         }
       } catch (err) {
-        console.error("Firestore Init Error:", err);
-        setFits(FITS_DATA); // Fallback to hardcoded constants
+        console.error("Firestore initialization failed, using local vault:", err);
       } finally {
+        // Ensure loading screen is dismissed even on complete network failure
         setLoading(false);
       }
     };
 
     initApp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

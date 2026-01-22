@@ -1,11 +1,17 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+const getAI = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.warn("Gemini API Key missing. Motion restricted twin.");
+  }
+  return new GoogleGenAI({ apiKey: apiKey || 'dummy-key' });
+};
 
 export const generateStylingInsight = async (title: string, brands: string[]) => {
-  const ai = getAI();
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `Give a high-hype, aggressive street-luxe fashion review (2 sentences max) for a fit called "${title}" with brands like ${brands.join(', ')}. 
@@ -25,8 +31,8 @@ export const generateStylingInsight = async (title: string, brands: string[]) =>
 };
 
 export const generateStyleResponse = async (userMessage: string) => {
-  const ai = getAI();
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: `You are Shadrack Baraka, the most legendary stylist in LA. 
