@@ -8,18 +8,19 @@ export const generateStylingInsight = async (title: string, brands: string[]) =>
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `Generate a short, high-fashion editorial critique (2 sentences max) for an outfit titled "${title}" featuring brands like ${brands.join(', ')}. 
-      The perspective is strictly ANTI-FAST FASHION. Focus on longevity, silhouette, and texture. 
-      Use a sophisticated, minimal, and serious tone. No emojis.`,
+      contents: `Give a high-hype, aggressive street-luxe fashion review (2 sentences max) for a fit called "${title}" with brands like ${brands.join(', ')}. 
+      Be strictly AGAINST mid fast fashion. Use heavy Gen Z slang, LA street talk, and AAVE. 
+      Terms to use: "tap in twin", "gng", "lit", "no cap", "on god", "motion", "it's giving", "heat", "brick", "dub", "main character", "grail". 
+      Make it sound like a legendary LA stylist talking to their best client. No emojis.`,
       config: {
-        temperature: 0.7,
-        topP: 0.9,
+        temperature: 1.0,
+        topP: 0.95,
       }
     });
-    return response.text || "A masterclass in restraint and architectural silhouette.";
+    return response.text || "This fit is straight lava, twin. You're really him for this one, no cap.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "A masterclass in restraint and architectural silhouette.";
+    return "This fit is straight gas, gng. Real motion only.";
   }
 };
 
@@ -28,14 +29,15 @@ export const generateStyleResponse = async (userMessage: string) => {
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: `You are Shadrack Baraka, an elite fashion stylist known as _pixelpunk. 
-      Your stance is "Fuck Fast Fashion." You believe style is intentional, slow, and archived. 
-      A user asks: "${userMessage}". Respond concisely (max 3 sentences), confident and credible. 
-      Maintain a dark, editorial, anti-fast-fashion persona. Avoid emojis.`,
+      contents: `You are Shadrack Baraka, the most legendary stylist in LA. 
+      You hate fast fashion—it's mid and a massive dub. You only mess with grails. 
+      A user asks: "${userMessage}". Reply with heavy Gen Z slang, LA street talk, and AAVE. 
+      Use phrases like "tap in twin", "wassup gng", "on god", "no cap", "straight heat". 
+      Be confident, serious, and sound like you're the main character. Max 3 sentences. No emojis.`,
     });
-    return response.text || "Style is the silent language of the soul. Keep your silhouettes sharp and your palette focused.";
+    return response.text || "Real style is forever, trends are a dub gng. Keep it 100 with your rotation, no cap.";
   } catch (error) {
     console.error("Gemini Response Error:", error);
-    return "Style is the silent language of the soul. Keep your silhouettes sharp and your palette focused.";
+    return "Real style is forever, trends are a dub. Keep it 100 with your rotation.";
   }
 };

@@ -4,8 +4,8 @@ import { Fit } from './types';
 export const FITS_DATA: Fit[] = [
   {
     id: '1',
-    title: 'Monochrome Echo',
-    description: 'This fit exists outside trend cycles. A study in tonal depth and structural layering using heavy-weight archival fabrics designed to endure.',
+    title: 'Void Motion',
+    description: 'This fit is straight lava, no cap. Archival black layers that stay cold forever. On god, this is a grail you can\'t just cop anywhere. Real motion only.',
     imageUrl: 'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&q=80&w=800',
     category: 'minimal',
     brands: ['Rick Owens', 'Ann Demeulemeester', 'Custom Archive'],
@@ -14,8 +14,8 @@ export const FITS_DATA: Fit[] = [
   },
   {
     id: '2',
-    title: 'Concrete Pulse',
-    description: 'Worn more than once. Styled more than twice. Exploring architectural weight through structured denim that breaks in over years, not weeks.',
+    title: 'Concrete Stepper',
+    description: 'Wassup gng, we really outside with this one. Stamped denim that hits different in the light. Fast fashion is a dub, we only mess with the premium cuts.',
     imageUrl: 'https://images.unsplash.com/photo-1550639525-c97d455acf70?auto=format&fit=crop&q=80&w=800',
     category: 'avant-garde',
     brands: ['Issey Miyake', 'Yohji Yamamoto'],
@@ -24,8 +24,8 @@ export const FITS_DATA: Fit[] = [
   },
   {
     id: '3',
-    title: 'Void Runner',
-    description: 'Designed to last longer than attention spans. High-performance technical wear curated with intention, prioritizing utility over hype.',
+    title: 'Tech Heat',
+    description: 'Main character energy. This look is for the ones who actually know the vision. Heavy utility, zero hype-chasing. It\'s giving legendary, for real.',
     imageUrl: 'https://images.unsplash.com/photo-1539106609512-d875b6819348?auto=format&fit=crop&q=80&w=800',
     category: 'streetwear',
     brands: ['Acronym', 'Stone Island Shadow Project'],
@@ -34,8 +34,8 @@ export const FITS_DATA: Fit[] = [
   },
   {
     id: '4',
-    title: 'Structured Silence',
-    description: 'Clothes age, style evolves. Sharp formal silhouettes defined by aggressive shoulder lines and enduring craftsmanship.',
+    title: 'Executive Motion',
+    description: 'The sharpest in the room, tap in twin. This look stays fresh while the trends die out. Legacy energy only. Straight gas, no brakes.',
     imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=800',
     category: 'tailoring',
     brands: ['Saint Laurent', 'Givenchy'],
@@ -44,8 +44,8 @@ export const FITS_DATA: Fit[] = [
   },
   {
     id: '5',
-    title: 'Archive Soul',
-    description: 'If it expires, it wasn’t style. Recontextualized 90s minimalism that remains relevant regardless of the current season.',
+    title: '90s Grail Vault',
+    description: 'If it ain’t timeless, it’s mid. Simple vibes from the vault that still put in work today. We movin’ different over here, no cap.',
     imageUrl: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=800',
     category: 'minimal',
     brands: ['Helmut Lang Archive', 'Margiela'],
@@ -54,8 +54,8 @@ export const FITS_DATA: Fit[] = [
   },
   {
     id: '6',
-    title: 'Fragmented Reality',
-    description: 'Fit over hype. Deconstructed aesthetics where raw edges and exposed seams serve as the primary decorative elements of a permanent wardrobe.',
+    title: 'Raw Stepper',
+    description: 'Style over hype, gng. Rough edges because we keep it 100. This is a forever piece that’ll have the streets talking. Lit from every angle.',
     imageUrl: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=80&w=800',
     category: 'avant-garde',
     brands: ['KAPITAL', 'Visvim'],

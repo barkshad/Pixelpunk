@@ -17,36 +17,39 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section className="min-h-screen pt-48 pb-32 px-8 md:px-16 max-w-[1600px] mx-auto flex flex-col justify-center">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 lg:gap-32 items-start">
+    <section className="min-h-screen pt-36 md:pt-48 pb-24 px-6 md:px-12 max-w-[1600px] mx-auto flex flex-col justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-32 items-start">
         {/* Contact Info */}
         <div className="lg:col-span-5">
-          <h2 className="text-7xl md:text-9xl font-serif italic mb-20 tracking-tighter">Inquiries</h2>
+          <div className="mb-8 inline-block w-fit px-4 py-1 bg-brand-bone text-brand-obsidian text-[10px] tracking-[0.4em] font-black uppercase italic">
+            WASSUP GNG
+          </div>
+          <h2 className="text-7xl md:text-9xl font-serif italic mb-16 tracking-tighter">Tap In Twin</h2>
           
-          <div className="space-y-20">
+          <div className="space-y-16">
             <div>
-              <h4 className="text-[10px] tracking-[0.4em] uppercase text-brand-bone/30 mb-8 font-bold">Direct Correspondence</h4>
+              <h4 className="text-[12px] tracking-[0.5em] uppercase text-brand-bone/50 mb-6 font-black">THE LINE</h4>
               <a 
                 href="mailto:studio@pixelpunk.art" 
-                className="text-3xl md:text-5xl font-serif hover:italic hover:pl-4 transition-all duration-500 border-b border-white/10 pb-2 block w-fit"
+                className="text-3xl md:text-5xl lg:text-6xl font-serif hover:italic hover:pl-6 transition-all duration-500 border-b-2 border-white/10 pb-2 block w-fit"
               >
                 studio@pixelpunk.art
               </a>
-              <p className="text-[9px] tracking-[0.3em] text-brand-bone/40 uppercase mt-4 font-bold">
-                Brands aligned with intentional fashion only. No fast fashion.
+              <p className="text-[11px] tracking-[0.3em] text-brand-bone/70 uppercase mt-6 font-black italic">
+                Visionary brands only. No mid energy over here, on god.
               </p>
             </div>
 
             <div>
-              <h4 className="text-[10px] tracking-[0.4em] uppercase text-brand-bone/30 mb-8 font-bold">Digital Presence</h4>
-              <div className="flex flex-col gap-6">
-                {['Instagram', 'Twitter (X)', 'WhatsApp Business', 'Are.na'].map((platform) => (
+              <h4 className="text-[12px] tracking-[0.5em] uppercase text-brand-bone/50 mb-6 font-black">THE SOCIALS</h4>
+              <div className="flex flex-col gap-8">
+                {['Instagram', 'Twitter (X)', 'WhatsApp', 'Are.na'].map((platform) => (
                   <a 
                     key={platform}
                     href="#" 
-                    className="text-sm tracking-[0.2em] uppercase text-brand-bone/60 hover:text-brand-bone hover:pl-4 transition-all duration-300 flex items-center gap-4 group"
+                    className="text-sm md:text-lg tracking-[0.3em] uppercase text-brand-bone/70 hover:text-brand-bone hover:pl-6 transition-all duration-300 flex items-center gap-6 group font-black"
                   >
-                    <span className="w-8 h-[1px] bg-white/10 group-hover:w-12 transition-all" />
+                    <span className="w-10 h-[1.5px] bg-white/10 group-hover:w-16 group-hover:bg-brand-bone transition-all" />
                     {platform}
                   </a>
                 ))}
@@ -55,13 +58,13 @@ const Contact: React.FC = () => {
           </div>
         </div>
 
-        {/* AI Inquiry Module */}
-        <div className="lg:col-span-7 bg-brand-charcoal border border-white/[0.05] p-12 md:p-16 relative">
+        {/* AI System */}
+        <div className="lg:col-span-7 bg-brand-charcoal border-2 border-white/[0.1] p-10 md:p-16 relative rounded-sm shadow-2xl">
           <div className="max-w-xl mx-auto">
-            <header className="mb-12 border-b border-white/5 pb-8">
-              <h3 className="text-2xl font-serif italic mb-4 tracking-tight">Style Consultation System</h3>
-              <p className="text-sm text-brand-bone/40 leading-relaxed font-light">
-                Utilize the _pixelpunk archival database to receive immediate stylistic analysis for specific garments or conceptual silhouettes. Grounded in intentional styling theory.
+            <header className="mb-10 border-b border-white/10 pb-10">
+              <h3 className="text-3xl font-serif italic mb-4 tracking-tighter">THE STYLE CONSULT</h3>
+              <p className="text-base md:text-lg text-brand-bone/70 leading-relaxed font-bold italic">
+                Need to fix your rotation gng? Tap in with the AI stylist to get the vision. No brick fits allowed, on god.
               </p>
             </header>
             
@@ -70,38 +73,29 @@ const Contact: React.FC = () => {
                 <textarea 
                   value={msg}
                   onChange={(e) => setMsg(e.target.value)}
-                  placeholder="Inquire about silhouette, brand pairings, or archival theory..."
-                  className="w-full bg-brand-obsidian/50 border border-white/10 p-6 text-sm focus:outline-none focus:border-brand-bone/30 transition-all min-h-[160px] resize-none font-light tracking-wide placeholder:text-brand-bone/20"
+                  placeholder="Ask for the heat twin..."
+                  className="w-full bg-brand-obsidian/60 border-2 border-white/20 p-8 text-base md:text-lg focus:outline-none focus:border-brand-bone/60 transition-all min-h-[200px] resize-none font-bold tracking-tight placeholder:text-brand-bone/30 rounded-sm"
                 />
               </div>
               
               <button 
                 disabled={loading}
-                className="w-full py-6 bg-brand-bone text-brand-obsidian hover:bg-white transition-all text-[11px] tracking-[0.4em] font-black uppercase disabled:opacity-50 flex items-center justify-center gap-4"
+                className="w-full py-6 md:py-8 bg-brand-bone text-brand-obsidian hover:bg-white transition-all text-[14px] md:text-[16px] tracking-[0.5em] font-black uppercase disabled:opacity-50 flex items-center justify-center gap-6 rounded-sm shadow-lg shadow-white/5"
               >
-                {loading ? (
-                  <>
-                    <div className="w-1.5 h-1.5 bg-brand-obsidian rounded-full animate-ping" />
-                    ANALYZING DATA
-                  </>
-                ) : 'SUBMIT INQUIRY'}
+                {loading ? 'Processing the Motion...' : 'COP THE VERDICT'}
               </button>
             </form>
 
             {response && (
-              <div className="mt-16 pt-12 border-t border-white/10 fade-in">
-                <span className="text-[9px] tracking-[0.3em] uppercase text-brand-bone/30 block mb-6 font-bold">System Output</span>
-                <div className="bg-white/[0.02] p-8 border-l border-white/10">
-                  <p className="font-serif text-2xl lg:text-3xl leading-snug italic text-brand-bone/90">
+              <div className="mt-16 pt-12 border-t border-white/20 fade-in">
+                <span className="text-[11px] tracking-[0.4em] uppercase text-brand-bone/50 block mb-6 font-black italic">BARAKA'S VERDICT</span>
+                <div className="bg-white/[0.05] p-10 border-l-4 border-brand-bone shadow-inner">
+                  <p className="font-serif text-2xl md:text-4xl leading-tight italic text-brand-bone tracking-tight">
                     "{response}"
                   </p>
                 </div>
               </div>
             )}
-          </div>
-
-          <div className="absolute bottom-8 right-8">
-            <span className="text-[8px] tracking-[0.4em] text-brand-bone/10 uppercase font-bold">SECURE CHANNEL ALPHA-9</span>
           </div>
         </div>
       </div>
