@@ -18,6 +18,7 @@ export interface SiteSettings {
   homeHeadline: string;
   aboutManifesto: string;
   footerTagline: string;
+  heroVideoUrl?: string;
 }
 
 export type ViewState = 'home' | 'fits' | 'about' | 'contact' | 'admin';

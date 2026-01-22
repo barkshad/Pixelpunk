@@ -21,8 +21,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [heroUploading, setHeroUploading] = useState(false);
   const [stagedFits, setStagedFits] = useState<StagedFit[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const heroVideoRef = useRef<HTMLInputElement>(null);
 
   const [batchConfig, setBatchConfig] = useState({
     category: 'streetwear' as Fit['category'],
@@ -52,6 +54,36 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
     const mediaSuffix = isVideo ? 'CLIP' : 'GRAIL';
     const num = 101 + index + Math.floor(Math.random() * 10);
     return `${prefix} ${mediaSuffix} ${num}`;
+  };
+
+  const handleHeroVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setHeroUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'real_unsigned');
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/ds2mbrzcn/video/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      
+      if (data.secure_url) {
+        const newSettings = { ...settings, heroVideoUrl: data.secure_url };
+        setSettings(newSettings);
+        await updateDoc(doc(db, 'settings', 'global'), { heroVideoUrl: data.secure_url });
+        alert('HERO VIDEO UPDATED TWIN. THE MOTION IS LETHAL.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('HERO VIDEO UPLOAD FAILED GNG.');
+    } finally {
+      setHeroUploading(false);
+    }
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -295,6 +327,24 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ fits, setFits, settings, setSet
           <div className="sticky top-40 p-10 bg-brand-bone/5 border border-white/10">
             <h3 className="text-2xl font-serif italic mb-8 border-b border-white/10 pb-4 uppercase tracking-tighter">Vision Config</h3>
             <div className="space-y-8">
+              <div>
+                <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-3 font-black italic">Hero Background Video</label>
+                <div className="space-y-4">
+                  <input type="file" accept="video/*" ref={heroVideoRef} onChange={handleHeroVideoUpload} className="hidden" />
+                  <button 
+                    onClick={() => heroVideoRef.current?.click()}
+                    className={`w-full py-6 border border-brand-bone/40 hover:border-brand-bone text-[10px] tracking-[0.3em] uppercase font-black transition-all ${heroUploading ? 'animate-pulse' : ''}`}
+                  >
+                    {heroUploading ? 'UPGRADING VISION...' : 'UPDATE HERO VIDEO'}
+                  </button>
+                  {settings.heroVideoUrl && (
+                    <div className="aspect-video bg-black/40 rounded-sm overflow-hidden border border-white/10">
+                       <video src={settings.heroVideoUrl} muted autoPlay loop className="w-full h-full object-cover grayscale opacity-50" />
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div>
                 <label className="text-[10px] tracking-[0.3em] uppercase text-brand-bone/40 block mb-3 font-black italic">Headline</label>
                 <input type="text" value={settings.homeHeadline} onChange={e => updateDoc(doc(db, 'settings', 'global'), {homeHeadline: e.target.value})} className="w-full bg-brand-obsidian/40 border-b border-white/10 p-3 text-sm font-black italic outline-none" />

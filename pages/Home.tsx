@@ -12,11 +12,22 @@ const Home: React.FC<{ setView: (v: any) => void, settings: SiteSettings }> = ({
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-brand-obsidian px-6">
       {/* Background Visual */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1514333130115-3407c93e267d?auto=format&fit=crop&q=80&w=2000" 
-          alt="Street Culture"
-          className="w-full h-full object-cover grayscale opacity-30 scale-[1.05]"
-        />
+        {settings.heroVideoUrl ? (
+          <video 
+            src={settings.heroVideoUrl}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover grayscale opacity-30 scale-[1.05]"
+          />
+        ) : (
+          <img 
+            src="https://images.unsplash.com/photo-1514333130115-3407c93e267d?auto=format&fit=crop&q=80&w=2000" 
+            alt="Street Culture"
+            className="w-full h-full object-cover grayscale opacity-30 scale-[1.05]"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-brand-obsidian via-brand-obsidian/40 to-brand-obsidian" />
       </div>
 

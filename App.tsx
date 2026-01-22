@@ -17,21 +17,22 @@ const App: React.FC = () => {
   const [settings, setSettings] = useState<SiteSettings>({
     homeHeadline: "Fuck Fast Fashion.",
     aboutManifesto: "Motion is forever. Trends are mid. This is my language. I stay selective twin.",
-    footerTagline: "FUCK FAST FASHION TWIN."
+    footerTagline: "FUCK FAST FASHION TWIN.",
+    heroVideoUrl: ""
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initApp = async () => {
       try {
-        // Fetch Settings with timeout/fallback logic
+        // Fetch Settings
         const settingsRef = doc(db, 'settings', 'global');
         const settingsSnap = await getDoc(settingsRef).catch(() => null);
         
         if (settingsSnap && settingsSnap.exists()) {
           setSettings(settingsSnap.data() as SiteSettings);
         } else {
-          // Attempt to initialize if missing, but don't block on failure
+          // Initialize if missing
           setDoc(settingsRef, settings).catch(e => console.warn("Settings init skipped:", e));
         }
 
@@ -44,7 +45,6 @@ const App: React.FC = () => {
       } catch (err) {
         console.error("Firestore initialization failed, using local vault:", err);
       } finally {
-        // Ensure loading screen is dismissed even on complete network failure
         setLoading(false);
       }
     };
